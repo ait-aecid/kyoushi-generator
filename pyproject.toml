@@ -11,6 +11,8 @@ packages = [
   { include = "cr_kyoushi", from = "src" }
 ]
 
+[tool.poetry.plugins."cr_kyoushi.generator"]
+
 [tool.poetry.dependencies]
 python = "^3.7"
 pydantic = "^1.8.1"
