@@ -35,7 +35,8 @@ def resolve_generators(data: Any, seed_store: SeedStore) -> Any:
 
     # resolve all actual generators
     if isinstance(data, Generator):
-        return data.generate(seed_store)
+        data.setup(seed_store)
+        return data.generate()
 
     # all other basic types are returned as is
     return data

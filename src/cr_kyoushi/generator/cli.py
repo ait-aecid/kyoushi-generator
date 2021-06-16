@@ -1,4 +1,5 @@
 import re
+import sys
 
 from pathlib import Path
 from typing import Optional
@@ -77,7 +78,8 @@ def apply(info: Info, context_file: Path, seed: Optional[int]):
 
     context_raw = yaml.load(context_file)
     context = resolve_generators(context_raw, seed_store=SeedStore(seed))
-
+    click.echo("Context:")
+    yaml.dump(context, sys.stdout)
     for template_source in config.templates:
         if template_source.replace is not None:
             (pattern, replace) = template_source.replace

@@ -53,7 +53,10 @@ class Generator(Protocol):
     def from_yaml(cls, constructor: Constructor, node: Node) -> "Generator":
         ...
 
-    def generate(self, seed_store: SeedStore) -> Any:
+    def setup(self, seed_store: SeedStore):
+        ...
+
+    def generate(self) -> Any:
         ...
 
 
@@ -93,7 +96,10 @@ class GeneratorBase(BaseModel):
         # through mapping keys
         return cls(**constructor.construct_mapping(node, deep=True))
 
-    def generate(self, seed_store: SeedStore) -> Any:
+    def setup(self, seed_store: SeedStore):
+        raise NotImplementedError()
+
+    def generate(self) -> Any:
         raise NotImplementedError()
 
 
