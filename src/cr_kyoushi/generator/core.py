@@ -1,3 +1,4 @@
+from math import pi
 from random import Random
 from typing import (
     Any,
@@ -127,6 +128,69 @@ class RandomGauss(RandomGeneratorBase):
     def generate(self) -> float:
         return self._random.gauss(self.mu, self.sigma)
 
+    @validator("sigma")
+    def non_negative_sigma(cls, v: float):
+        assert v > 0, "Sigma must be greater than 0"
+        return v
+
+
+class RandomBits(RandomGeneratorBase):
+    yaml_tag: ClassVar[str] = u"!random.bits"
+
+    bits: int = Field(..., description="The number of bits to randomly generate")
+
+    def generate(self) -> int:
+        return self._random.getrandbits(self.bits)
+
+    @validator("bits")
+    def non_zero_bits(cls, v: int):
+        assert v > 0, "Bits must be greater than 0"
+        return v
+
+
+class RandomLogNormal(RandomGeneratorBase):
+    yaml_tag: ClassVar[str] = u"!random.log_normal"
+
+    mu: float = Field(..., description="The mu value for the distribution")
+    sigma: float = Field(..., description="The sigma value for the distribution")
+
+    def generate(self) -> float:
+        return self._random.lognormvariate(self.mu, self.sigma)
+
+    @validator("sigma")
+    def non_negative_sigma(cls, v: float):
+        assert v >= 0, "Sigma must not be negative"
+        return v
+
+
+class RandomNormal(RandomGeneratorBase):
+    yaml_tag: ClassVar[str] = u"!random.normal"
+
+    mu: float = Field(..., description="The mu value for the distribution")
+    sigma: float = Field(..., description="The sigma value for the distribution")
+
+    def generate(self) -> float:
+        return self._random.normalvariate(self.mu, self.sigma)
+
+    @validator("sigma")
+    def non_negative_sigma(cls, v: float):
+        assert v >= 0, "Sigma must not be negative"
+        return v
+
+
+class RandomPareto(RandomGeneratorBase):
+    yaml_tag: ClassVar[str] = u"!random.pareto"
+
+    alpha: float = Field(..., description="The alpha value for the distribution")
+
+    def generate(self) -> float:
+        return self._random.paretovariate(self.alpha)
+
+    @validator("alpha")
+    def non_zero_alpha(cls, v: float):
+        assert v != 0, "Alpha must not be zero 0"
+        return v
+
 
 class RandomInt(RandomGeneratorBase):
     yaml_tag: ClassVar[str] = u"!random.int"
@@ -154,3 +218,82 @@ class RandomRandom(RandomGeneratorBase):
 
     def generate(self) -> float:
         return self._random.random()
+
+
+class RandomSample(RandomGeneratorBase):
+    yaml_tag: ClassVar[str] = u"!random.sample"
+
+    choices: List[Any] = Field(..., description="The elements to sample from")
+    size: int = Field(1, description="The number of elements to sample")
+
+    def generate(self) -> List[Any]:
+        return self._random.sample(self.choices, self.size)
+
+    @validator("size")
+    def non_negative_size(cls, v: int):
+        assert v >= 0, "Size must not be negative"
+        return v
+
+    @validator("size")
+    def non_size_max_len_choices(cls, v: int, values: Dict[str, Any]):
+        if "choices" in values:
+            assert v <= len(
+                values["choices"]
+            ), "Sample size can't exceed number of available choices"
+        return v
+
+
+class RandomTriangular(RandomGeneratorBase):
+    yaml_tag: ClassVar[str] = u"!random.triangular"
+
+    low: float = Field(..., description="The low value for the distribution")
+    high: float = Field(..., description="The high value for the distribution")
+    mode: float = Field(..., description="The mode value for the distribution")
+
+    def generate(self) -> float:
+        return self._random.triangular(self.low, self.high, self.mode)
+
+
+class RandomUniform(RandomGeneratorBase):
+    yaml_tag: ClassVar[str] = u"!random.uniform"
+
+    a: float = Field(..., description="The start of the range for the distribution")
+    b: float = Field(..., description="The end of the range for the distribution")
+
+    def generate(self) -> float:
+        return self._random.uniform(self.a, self.b)
+
+
+class RandomVonMises(RandomGeneratorBase):
+    yaml_tag: ClassVar[str] = u"!random.von_mises"
+
+    mu: float = Field(..., description="The mu value for the distribution")
+    kappa: float = Field(..., description="The kappa value for the distribution")
+
+    def generate(self) -> float:
+        return self._random.vonmisesvariate(self.mu, self.kappa)
+
+    @validator("mu")
+    def mu_value_range(cls, v: float):
+        assert v >= 0 and v <= 2 * pi, "Mu must be of form 0 <= mu <= 2*pi"
+        return
+
+    @validator("kappa")
+    def non_negative_kappa(cls, v: int):
+        assert v >= 0, "Kappa must not be negative"
+        return v
+
+
+class RandomWeibull(RandomGeneratorBase):
+    yaml_tag: ClassVar[str] = u"!random.weibull"
+
+    alpha: float = Field(..., description="The alpha value for the distribution")
+    beta: float = Field(..., description="The beta value for the distribution")
+
+    def generate(self) -> float:
+        return self._random.weibullvariate(self.alpha, self.beta)
+
+    @validator("beta")
+    def non_zero_beta(cls, v: float):
+        assert v != 0, "beta must not be zero 0"
+        return v

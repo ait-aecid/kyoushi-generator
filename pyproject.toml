@@ -18,9 +18,18 @@ packages = [
 "random.exponential" = "cr_kyoushi.generator.core:RandomExponential"
 "random.gamma" = "cr_kyoushi.generator.core:RandomGamma"
 "random.gauss" = "cr_kyoushi.generator.core:RandomGauss"
+"random.bits" = "cr_kyoushi.generator.core:RandomBits"
+"random.log_normal" = "cr_kyoushi.generator.core:RandomLogNormal"
+"random.normal" = "cr_kyoushi.generator.core:RandomNormal"
+"random.pareto" = "cr_kyoushi.generator.core:RandomPareto"
 "random.int" = "cr_kyoushi.generator.core:RandomInt"
 "random.range" = "cr_kyoushi.generator.core:RandomRange"
 "random.random" = "cr_kyoushi.generator.core:RandomRandom"
+"random.sample" = "cr_kyoushi.generator.core:RandomSample"
+"random.triangular" = "cr_kyoushi.generator.core:RandomTriangular"
+"random.uniform" = "cr_kyoushi.generator.core:RandomUniform"
+"random.von_mises" = "cr_kyoushi.generator.core:RandomVonMises"
+"random.weibull" = "cr_kyoushi.generator.core:RandomWeibull"
 
 
 [tool.poetry.dependencies]
