@@ -30,6 +30,7 @@ packages = [
 "random.uniform" = "cr_kyoushi.generator.core:RandomUniform"
 "random.von_mises" = "cr_kyoushi.generator.core:RandomVonMises"
 "random.weibull" = "cr_kyoushi.generator.core:RandomWeibull"
+"core.for" = "cr_kyoushi.generator.core:For"
 
 
 [tool.poetry.dependencies]

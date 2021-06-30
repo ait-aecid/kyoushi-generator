@@ -42,6 +42,17 @@ def resolve_generators(data: Any, seed_store: SeedStore) -> Any:
     return data
 
 
+def standard_jinja_config() -> JinjaConfig:
+    return JinjaConfig(
+        block_start="{%",
+        block_end="%}",
+        variable_start="{{",
+        variable_end="}}",
+        comment_start="{#",
+        comment_end="#}",
+    )
+
+
 def create_environment(
     config: JinjaConfig,
     template_dirs: Union[Text, Path, List[Union[Text, Path]]] = Path("./"),

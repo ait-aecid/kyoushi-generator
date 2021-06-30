@@ -6,10 +6,12 @@ from typing import (
     Dict,
     List,
     Optional,
+    Set,
     Union,
 )
 
 from pydantic import (
+    BaseModel,
     Field,
     PrivateAttr,
     validator,
@@ -17,6 +19,12 @@ from pydantic import (
 
 from .plugin import GeneratorBase
 from .random import SeedStore
+from .template import (
+    create_environment,
+    render_template,
+    resolve_generators,
+    standard_jinja_config,
+)
 
 
 class RandomGeneratorBase(GeneratorBase):
@@ -27,7 +35,7 @@ class RandomGeneratorBase(GeneratorBase):
 
 
 class RandomBeta(RandomGeneratorBase):
-    yaml_tag: ClassVar[str] = u"!random.beta"
+    yaml_tag: ClassVar[str] = "!random.beta"
 
     alpha: float = Field(..., description="The alpha value for the distribution")
     beta: float = Field(..., description="The beta value for the distribution")
@@ -37,7 +45,7 @@ class RandomBeta(RandomGeneratorBase):
 
 
 class RandomChoice(RandomGeneratorBase):
-    yaml_tag: ClassVar[str] = u"!random.choice"
+    yaml_tag: ClassVar[str] = "!random.choice"
 
     choices: List[Any] = Field(
         ..., description="Sequence of elements to randomly choose from"
@@ -53,7 +61,7 @@ class RandomChoice(RandomGeneratorBase):
 
 
 class RandomChoices(RandomGeneratorBase):
-    yaml_tag: ClassVar[str] = u"!random.choices"
+    yaml_tag: ClassVar[str] = "!random.choices"
 
     choices: List[Any] = Field(
         ..., description="Sequence of elements to randomly choose from"
@@ -89,7 +97,7 @@ class RandomChoices(RandomGeneratorBase):
 
 
 class RandomExponential(RandomGeneratorBase):
-    yaml_tag: ClassVar[str] = u"!random.exponential"
+    yaml_tag: ClassVar[str] = "!random.exponential"
 
     lambda_: float = Field(
         ..., description="The lambda parameter for the distribution", alias="lambda"
@@ -105,7 +113,7 @@ class RandomExponential(RandomGeneratorBase):
 
 
 class RandomGamma(RandomGeneratorBase):
-    yaml_tag: ClassVar[str] = u"!random.gamma"
+    yaml_tag: ClassVar[str] = "!random.gamma"
 
     alpha: float = Field(..., description="The alpha value for the distribution")
     beta: float = Field(..., description="The beta value for the distribution")
@@ -120,7 +128,7 @@ class RandomGamma(RandomGeneratorBase):
 
 
 class RandomGauss(RandomGeneratorBase):
-    yaml_tag: ClassVar[str] = u"!random.gauss"
+    yaml_tag: ClassVar[str] = "!random.gauss"
 
     mu: float = Field(..., description="The mu value for the distribution")
     sigma: float = Field(..., description="The sigma value for the distribution")
@@ -135,7 +143,7 @@ class RandomGauss(RandomGeneratorBase):
 
 
 class RandomBits(RandomGeneratorBase):
-    yaml_tag: ClassVar[str] = u"!random.bits"
+    yaml_tag: ClassVar[str] = "!random.bits"
 
     bits: int = Field(..., description="The number of bits to randomly generate")
 
@@ -149,7 +157,7 @@ class RandomBits(RandomGeneratorBase):
 
 
 class RandomLogNormal(RandomGeneratorBase):
-    yaml_tag: ClassVar[str] = u"!random.log_normal"
+    yaml_tag: ClassVar[str] = "!random.log_normal"
 
     mu: float = Field(..., description="The mu value for the distribution")
     sigma: float = Field(..., description="The sigma value for the distribution")
@@ -164,7 +172,7 @@ class RandomLogNormal(RandomGeneratorBase):
 
 
 class RandomNormal(RandomGeneratorBase):
-    yaml_tag: ClassVar[str] = u"!random.normal"
+    yaml_tag: ClassVar[str] = "!random.normal"
 
     mu: float = Field(..., description="The mu value for the distribution")
     sigma: float = Field(..., description="The sigma value for the distribution")
@@ -179,7 +187,7 @@ class RandomNormal(RandomGeneratorBase):
 
 
 class RandomPareto(RandomGeneratorBase):
-    yaml_tag: ClassVar[str] = u"!random.pareto"
+    yaml_tag: ClassVar[str] = "!random.pareto"
 
     alpha: float = Field(..., description="The alpha value for the distribution")
 
@@ -193,7 +201,7 @@ class RandomPareto(RandomGeneratorBase):
 
 
 class RandomInt(RandomGeneratorBase):
-    yaml_tag: ClassVar[str] = u"!random.int"
+    yaml_tag: ClassVar[str] = "!random.int"
     min_: int = Field(..., description="The lower bound", alias="min")
     max_: int = Field(..., description="The upper bound", alias="max")
 
@@ -202,7 +210,7 @@ class RandomInt(RandomGeneratorBase):
 
 
 class RandomRange(RandomGeneratorBase):
-    yaml_tag: ClassVar[str] = u"!random.range"
+    yaml_tag: ClassVar[str] = "!random.range"
     start: int = Field(..., description="The start of random range")
     stop: Optional[int] = Field(
         ..., description="The optional stop for the random range"
@@ -214,14 +222,14 @@ class RandomRange(RandomGeneratorBase):
 
 
 class RandomRandom(RandomGeneratorBase):
-    yaml_tag: ClassVar[str] = u"!random.random"
+    yaml_tag: ClassVar[str] = "!random.random"
 
     def generate(self) -> float:
         return self._random.random()
 
 
 class RandomSample(RandomGeneratorBase):
-    yaml_tag: ClassVar[str] = u"!random.sample"
+    yaml_tag: ClassVar[str] = "!random.sample"
 
     choices: List[Any] = Field(..., description="The elements to sample from")
     size: int = Field(1, description="The number of elements to sample")
@@ -244,7 +252,7 @@ class RandomSample(RandomGeneratorBase):
 
 
 class RandomTriangular(RandomGeneratorBase):
-    yaml_tag: ClassVar[str] = u"!random.triangular"
+    yaml_tag: ClassVar[str] = "!random.triangular"
 
     low: float = Field(..., description="The low value for the distribution")
     high: float = Field(..., description="The high value for the distribution")
@@ -255,7 +263,7 @@ class RandomTriangular(RandomGeneratorBase):
 
 
 class RandomUniform(RandomGeneratorBase):
-    yaml_tag: ClassVar[str] = u"!random.uniform"
+    yaml_tag: ClassVar[str] = "!random.uniform"
 
     a: float = Field(..., description="The start of the range for the distribution")
     b: float = Field(..., description="The end of the range for the distribution")
@@ -265,7 +273,7 @@ class RandomUniform(RandomGeneratorBase):
 
 
 class RandomVonMises(RandomGeneratorBase):
-    yaml_tag: ClassVar[str] = u"!random.von_mises"
+    yaml_tag: ClassVar[str] = "!random.von_mises"
 
     mu: float = Field(..., description="The mu value for the distribution")
     kappa: float = Field(..., description="The kappa value for the distribution")
@@ -285,7 +293,7 @@ class RandomVonMises(RandomGeneratorBase):
 
 
 class RandomWeibull(RandomGeneratorBase):
-    yaml_tag: ClassVar[str] = u"!random.weibull"
+    yaml_tag: ClassVar[str] = "!random.weibull"
 
     alpha: float = Field(..., description="The alpha value for the distribution")
     beta: float = Field(..., description="The beta value for the distribution")
@@ -297,3 +305,117 @@ class RandomWeibull(RandomGeneratorBase):
     def non_zero_beta(cls, v: float):
         assert v != 0, "beta must not be zero 0"
         return v
+
+
+class ForElement(BaseModel):
+    key: Any = Field(..., description="The key element for the current iteration")
+    value: Any = Field(..., description="The value element for the current iteration")
+
+
+class For(GeneratorBase):
+    yaml_tag: ClassVar[str] = "!for"
+
+    _seed_store: SeedStore = PrivateAttr()
+
+    each: Optional[Union[List[Any], Dict[Any, Any], Set[Any]]] = Field(
+        None, description="The container to loop over"
+    )
+    count: Optional[int] = Field(None, description="The number of iterations")
+
+    content: str = Field(
+        ...,
+        description="The jinja2 template string representing the desired result of the for directive",
+    )
+
+    as_list: bool = Field(
+        True,
+        description="If the result should be stored as list, if false a dict is used",
+    )
+
+    def setup(self, seed_store):
+        self._seed_store = seed_store
+
+    @validator("count", always=True)
+    def must_have_count_or_each(cls, v: Optional[int], values: Dict[str, Any]):
+        assert (
+            v is None or "each" not in values or values["each"] is None
+        ), "Cannot have both each and count"
+        return v
+
+    def _resolve_iteration(
+        self, env, content: str, each: ForElement
+    ) -> Union[List[Any], Dict[Any, Any]]:
+        rendered_content = render_template(env, content, {"each": each})
+        print("Rendered content")
+        print("-----------------")
+        print(f"type: {type(rendered_content)}")
+        print(rendered_content)
+        print("-----------------")
+        return resolve_generators(rendered_content, self._seed_store)
+
+    def generate(self):
+        jinja_config = standard_jinja_config()
+        env = create_environment(jinja_config)
+
+        if self.as_list:
+            if self.count is not None:
+                return [
+                    self._resolve_iteration(
+                        env, self.content, ForElement(key=i, value=i)
+                    )
+                    for i in range(0, self.count)
+                ]
+
+            if self.each is not None:
+                if isinstance(self.each, list):
+                    return [
+                        self._resolve_iteration(
+                            env, self.content, ForElement(key=i, value=e)
+                        )
+                        for i, e in enumerate(self.each)
+                    ]
+                elif isinstance(self.each, set):
+                    return [
+                        self._resolve_iteration(
+                            env, self.content, ForElement(key=e, value=e)
+                        )
+                        for e in self.each
+                    ]
+                elif isinstance(self.each, dict):
+                    return [
+                        self._resolve_iteration(
+                            env, self.content, ForElement(key=k, value=e)
+                        )
+                        for k, e in self.each.items()
+                    ]
+        else:
+            if self.count is not None:
+                return {
+                    i: self._resolve_iteration(
+                        env, self.content, ForElement(key=i, value=i)
+                    )
+                    for i in range(0, self.count)
+                }
+
+            if self.each is not None:
+                if isinstance(self.each, list):
+                    return {
+                        i: self._resolve_iteration(
+                            env, self.content, ForElement(key=i, value=e)
+                        )
+                        for i, e in enumerate(self.each)
+                    }
+                elif isinstance(self.each, set):
+                    return {
+                        e: self._resolve_iteration(
+                            env, self.content, ForElement(key=e, value=e)
+                        )
+                        for e in self.each
+                    }
+                elif isinstance(self.each, dict):
+                    return {
+                        k: self._resolve_iteration(
+                            env, self.content, ForElement(key=k, value=e)
+                        )
+                        for k, e in self.each.items()
+                    }
