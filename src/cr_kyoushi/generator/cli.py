@@ -1,5 +1,4 @@
 import re
-import sys
 
 from pathlib import Path
 from typing import Optional
@@ -7,16 +6,15 @@ from typing import Optional
 import click
 
 from .config import Config
-from .plugin import (
-    get_generators,
-    get_yaml,
-)
+from .plugin import get_generators
 from .random import SeedStore
 from .template import (
+    create_context_environment,
     create_environment,
-    resolve_generators,
+    render_template,
     write_template,
 )
+from .utils import load_config
 
 
 class Info:
@@ -73,13 +71,10 @@ def apply(info: Info, context_file: Path, seed: Optional[int]):
     """Apply and generate the template."""
     config = Config()
     generators = get_generators(config.plugin)
-    yaml = get_yaml(generators)
-    env = create_environment(config.jinja)
+    env = create_environment(config.jinja, generators=generators)
+    context_env = create_context_environment(SeedStore(seed), generators)
+    context = load_config(render_template(context_env, context_file, {}))
 
-    context_raw = yaml.load(context_file)
-    context = resolve_generators(context_raw, seed_store=SeedStore(seed))
-    click.echo("Context:")
-    yaml.dump(context, sys.stdout)
     for template_source in config.templates:
         if template_source.replace is not None:
             (pattern, replace) = template_source.replace
@@ -90,7 +85,6 @@ def apply(info: Info, context_file: Path, seed: Optional[int]):
                 dest = template
             click.echo(f"Rendering {template}")
             write_template(
-                yaml,
                 env,
                 template,
                 dest,

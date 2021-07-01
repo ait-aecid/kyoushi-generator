@@ -1,3 +1,5 @@
+import re
+
 from pathlib import Path
 from typing import (
     Any,
@@ -21,41 +23,29 @@ from .plugin import Generator
 from .random import SeedStore
 
 
-def resolve_generators(data: Any, seed_store: SeedStore) -> Any:
-    # handle sub dicts
-    if isinstance(data, dict):
-        data_rendered = {}
-        for key, val in data.items():
-            data_rendered[key] = resolve_generators(val, seed_store)
-        return data_rendered
-
-    # handle list elements
-    if isinstance(data, list):
-        return [resolve_generators(val, seed_store) for val in data]
-
-    # resolve all actual generators
-    if isinstance(data, Generator):
-        data.setup(seed_store)
-        return data.generate()
-
-    # all other basic types are returned as is
-    return data
-
-
-def standard_jinja_config() -> JinjaConfig:
-    return JinjaConfig(
-        block_start="{%",
-        block_end="%}",
-        variable_start="{{",
-        variable_end="}}",
-        comment_start="{#",
-        comment_end="#}",
+def create_context_environment(
+    seed_store: SeedStore,
+    generators: List[Generator] = [],
+    template_dirs: Union[Text, Path, List[Union[Text, Path]]] = Path("./"),
+):
+    env = NativeEnvironment(
+        loader=FileSystemLoader(template_dirs),
+        undefined=StrictUndefined,
+        extensions=["jinja2.ext.do", "jinja2.ext.loopcontrols"],
     )
+    tag_match = re.compile(r"\!(.*)")
+    for gen in generators:
+        gen_instance = gen.create(seed_store)
+        env.globals.update(
+            {tag_match.sub(r"\1", gen.name).replace(".", "_"): gen_instance}
+        )
+    return env
 
 
 def create_environment(
     config: JinjaConfig,
     template_dirs: Union[Text, Path, List[Union[Text, Path]]] = Path("./"),
+    generators: List[Generator] = [],
 ):
     env = NativeEnvironment(
         loader=FileSystemLoader(template_dirs),
@@ -71,6 +61,10 @@ def create_environment(
         undefined=StrictUndefined,
         extensions=["jinja2.ext.do", "jinja2.ext.loopcontrols"],
     )
+    tag_match = re.compile(r"\!(.*)")
+    env.globals.update(
+        {tag_match.sub(r"\1", gen.name).replace(".", "_"): gen for gen in generators}
+    )
     return env
 
 
@@ -82,15 +76,12 @@ def render_template(env: NativeEnvironment, template: Union[Text, Path], context
         _template = env.from_string(template)
 
     value = _template.render(**context)
-
     if isinstance(value, Undefined):
         value._fail_with_undefined_error()
     return value
 
 
-def write_template(
-    yaml: YAML, env: NativeEnvironment, src: Path, dest: Path, context: Any
-):
+def write_template(env: NativeEnvironment, src: Path, dest: Path, context: Any):
     template_rendered = render_template(env, src, context)
     with open(dest, "w") as f:
         # mappings and lists are output as yaml files
@@ -99,6 +90,7 @@ def write_template(
             not isinstance(template_rendered, Text)
             and isinstance(template_rendered, Sequence)
         ):
+            yaml = YAML(typ="safe")
             yaml.dump(template_rendered, f)
         else:
             f.write(str(template_rendered))
