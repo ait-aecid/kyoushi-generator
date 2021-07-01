@@ -1,5 +1,3 @@
-import re
-
 from pathlib import Path
 from typing import (
     Any,
@@ -16,11 +14,17 @@ from jinja2 import (
     Undefined,
 )
 from jinja2.nativetypes import NativeEnvironment
+from pydantic.json import pydantic_encoder
 from ruamel.yaml import YAML
 
 from .config import JinjaConfig
 from .plugin import Generator
 from .random import SeedStore
+
+
+def _add_env_options(env: NativeEnvironment):
+    # use pydantic encoder as default for dumps to add support for more types
+    env.policies["json.dumps_kwargs"] = {"sort_keys": True, "default": pydantic_encoder}
 
 
 def create_context_environment(
@@ -33,12 +37,11 @@ def create_context_environment(
         undefined=StrictUndefined,
         extensions=["jinja2.ext.do", "jinja2.ext.loopcontrols"],
     )
-    tag_match = re.compile(r"\!(.*)")
+
     for gen in generators:
         gen_instance = gen.create(seed_store)
-        env.globals.update(
-            {tag_match.sub(r"\1", gen.name).replace(".", "_"): gen_instance}
-        )
+        env.globals.update({gen.name: gen_instance})
+    _add_env_options(env)
     return env
 
 
@@ -61,10 +64,8 @@ def create_environment(
         undefined=StrictUndefined,
         extensions=["jinja2.ext.do", "jinja2.ext.loopcontrols"],
     )
-    tag_match = re.compile(r"\!(.*)")
-    env.globals.update(
-        {tag_match.sub(r"\1", gen.name).replace(".", "_"): gen for gen in generators}
-    )
+    _add_env_options(env)
+
     return env
 
 
