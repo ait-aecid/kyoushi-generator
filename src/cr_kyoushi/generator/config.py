@@ -4,25 +4,12 @@ from typing import (
     List,
     Optional,
     Pattern,
-    Tuple,
 )
 
 from pydantic import (
     BaseModel,
     Field,
 )
-
-
-class TemplateSource(BaseModel):
-    glob: str = Field(
-        ...,
-        description="The glob to use for searching for the templates",
-    )
-
-    replace: Optional[Tuple[Pattern, str]] = Field(
-        None,
-        description="The regex to use for renaming the template files after rendering.",
-    )
 
 
 class PluginConfig(BaseModel):
@@ -68,7 +55,7 @@ class Config(BaseModel):
     jinja: JinjaConfig = Field(
         JinjaConfig(), description="The jinja2 template engine configuration"
     )
-    templates: List[TemplateSource] = Field(
-        [TemplateSource(glob="**/*.j2.ky", replace=(r"^(.*)\.j2\.ky$", r"\1"))],
-        description="List of template file globs to search for and render",
+    seed: Optional[int] = Field(
+        None,
+        description="A hard coded seed to use for instance creation with this model. Can be overwritten by CLI arguments.",
     )

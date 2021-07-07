@@ -1,10 +1,18 @@
 import json
+import re
+import sys
 
+from pathlib import Path
+from random import Random
 from typing import (
     TYPE_CHECKING,
     Any,
+    Optional,
 )
 
+from click import Path as ClickPath
+from git import Repo
+from git.exc import InvalidGitRepositoryError
 from ruamel.yaml import YAML
 from ruamel.yaml.error import YAMLError
 
@@ -39,6 +47,10 @@ def version_info(cli_info: Info) -> str:
     )
 
 
+def create_seed() -> int:
+    return Random().randint(sys.maxsize * -1, sys.maxsize)
+
+
 def load_config(config: str) -> Any:
     """Loads either a YAML or JSON config string.
 
@@ -58,3 +70,22 @@ def load_config(config: str) -> Any:
             return json.loads(config)
     else:
         return config
+
+
+class TIMSource(ClickPath):
+    name: str = "GIT repo/directory"
+    __git_regex: re.Pattern = re.compile(r"(https?|ssh|git)(.+)")
+    __git_replace: re.Pattern = re.compile(r"^git\+(.*)$")
+
+    def convert(self, value: str, param, ctx):
+        if self.__git_regex.match(value):
+            return self.__git_replace.sub(r"\1", value)
+        else:
+            return Path(super().convert(value, param, ctx))
+
+
+def is_git_repo(path) -> Optional[Repo]:
+    try:
+        return Repo(path)
+    except InvalidGitRepositoryError:
+        return None
