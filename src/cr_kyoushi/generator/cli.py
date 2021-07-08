@@ -121,13 +121,23 @@ def setup_tsm(
         load_config(render_template(object_config_env, object_config_file, context))
     )
 
-    render_tim(
+    (delete_dirs, delete_files) = render_tim(
         render_env,
         object_config,
         Path("."),
-        Path("."),
+        dest,
         context,
     )
+
+    # remove template files
+    while delete_files:
+        f = dest.joinpath(delete_files.pop())
+        dest.joinpath(f).unlink()
+
+    # remove template directories
+    while delete_dirs:
+        d = dest.joinpath(delete_dirs.pop())
+        shutil.rmtree(dest.joinpath(d))
 
     return (context, object_config)
 

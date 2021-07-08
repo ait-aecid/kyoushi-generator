@@ -1,14 +1,18 @@
 import shutil
 import sys
 
+from collections import deque
 from pathlib import Path
 from typing import (
     Any,
+    Deque,
     Dict,
     List,
     Mapping,
+    Optional,
     Sequence,
     Text,
+    Tuple,
     Union,
 )
 
@@ -136,6 +140,10 @@ class BaseObject(BaseModel):
         description="Dict that can be used to bind additional context info to a template object",
     )
 
+    def dict(self, **kwargs):
+        kwargs.setdefault("by_alias", True)
+        return super().dict(**kwargs)
+
 
 class BaseFileObject(BaseObject):
     src: str = Field(
@@ -148,9 +156,10 @@ class BaseFileObject(BaseObject):
         description="The templates destination path (relative to the containing directories destination path)",
     )
 
-    def dict(self, **kwargs):
-        kwargs.setdefault("by_alias", True)
-        return super().dict(**kwargs)
+    delete: bool = Field(
+        True,
+        description="If the template object should be deleted after instantiating the TSM",
+    )
 
 
 class File(BaseFileObject):
@@ -195,7 +204,14 @@ def render_tim(
     dest_dir: Path,
     global_context: Dict[str, Any],
     parent_context: Dict[str, Any] = {},
-):
+    delete_dirs: Optional[Deque[Path]] = None,
+    delete_files: Optional[Deque[Path]] = None,
+) -> Tuple[Deque[Path], Deque[Path]]:
+    if delete_dirs is None:
+        delete_dirs = deque()
+    if delete_files is None:
+        delete_files = deque()
+
     for obj in object_list:
         src: Path = src_dir.joinpath(obj.src)
         dest: Path = dest_dir.joinpath(obj.dest)
@@ -216,7 +232,18 @@ def render_tim(
             # handle all sub template objects (dirs and files)
             new_parent_context = parent_context.copy()
             new_parent_context.update(obj.extra)
-            render_tim(env, obj.contents, src, dest, global_context, new_parent_context)
+            if obj.delete and src not in delete_files:
+                delete_dirs.append(src)
+            render_tim(
+                env,
+                obj.contents,
+                src,
+                dest,
+                global_context,
+                new_parent_context,
+                delete_dirs,
+                delete_files,
+            )
 
         elif isinstance(obj, File):
             context = {
@@ -224,6 +251,10 @@ def render_tim(
                 "parent_context": parent_context,
                 "local_context": obj.extra,
             }
+            if obj.delete and src not in delete_files:
+                delete_files.append(src)
             write_template(env, src, dest, context)
         else:
             raise NotImplementedError()
+
+    return (delete_dirs, delete_files)
