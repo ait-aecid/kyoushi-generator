@@ -81,8 +81,7 @@ def write_config(config: Any, dest: Path):
     yaml = YAML(typ="safe")
     yaml.indent(mapping=2, sequence=4, offset=2)
     yaml.default_flow_style = False
-    yaml.sort_base_mapping_type_on_output = False
-
+    yaml.sort_base_mapping_type_on_output = False  # type: ignore
     with open(dest, "w") as f:
         obj = json.loads(json_str)
         yaml.dump(obj, f)
