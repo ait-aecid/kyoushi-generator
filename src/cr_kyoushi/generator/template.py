@@ -99,7 +99,6 @@ def create_environment(
 
 
 def render_template(env: NativeEnvironment, template: Union[Text, Path], context: Any):
-    print(f"Template {template}")
     # convert strings to template
     if isinstance(template, Path):
         _template = env.get_template(str(template))
@@ -149,6 +148,10 @@ class BaseFileObject(BaseObject):
         description="The templates destination path (relative to the containing directories destination path)",
     )
 
+    def dict(self, **kwargs):
+        kwargs.setdefault("by_alias", True)
+        return super().dict(**kwargs)
+
 
 class File(BaseFileObject):
     type_: Literal["file"] = Field("file", alias="type")
@@ -196,11 +199,6 @@ def render_tim(
     for obj in object_list:
         src: Path = src_dir.joinpath(obj.src)
         dest: Path = dest_dir.joinpath(obj.dest)
-        print("---")
-        print(
-            f"src: {src}, dest: {dest}, g: {global_context}, p: {parent_context}, obj: {obj}"
-        )
-        print("---")
         if isinstance(obj, Directory):
             # create the directory
             dest.mkdir(parents=True, exist_ok=True)

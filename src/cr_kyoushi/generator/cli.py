@@ -2,8 +2,11 @@ import shutil
 
 from pathlib import Path
 from typing import (
+    Any,
+    Dict,
     List,
     Optional,
+    Tuple,
     Union,
 )
 
@@ -21,6 +24,8 @@ from .plugin import (
 )
 from .random import SeedStore
 from .template import (
+    Directory,
+    File,
     create_context_environment,
     create_environment,
     create_template_object_environment,
@@ -33,6 +38,7 @@ from .utils import (
     create_seed,
     is_git_repo,
     load_config,
+    write_config,
 )
 
 
@@ -95,7 +101,7 @@ def setup_tsm(
     generators: List[Generator],
     context_file: Path,
     object_config_file: Path,
-):
+) -> Tuple[Dict[str, Any], List[Union[File, Directory]]]:
     # env used for rendering the context variables
     context_env = create_context_environment(
         SeedStore(seed), generators=generators, template_dirs=dest
@@ -115,8 +121,6 @@ def setup_tsm(
         load_config(render_template(object_config_env, object_config_file, context))
     )
 
-    print(f"Template object list: {object_config}")
-    click.confirm("Next step")
     render_tim(
         render_env,
         object_config,
@@ -125,31 +129,28 @@ def setup_tsm(
         context,
     )
 
+    return (context, object_config)
+
+
+def write_tsm_configs(
+    model_dir: Path,
+    config: Config,
+    context: Dict[str, Any],
+    object_config: List[Union[File, Directory]],
+):
+    write_config(config.dict(), model_dir.joinpath("config.yml"))
+    write_config(context, model_dir.joinpath("context.yml"))
+    write_config(object_config, model_dir.joinpath("templates.yml"))
+
 
 @cli.command()
 @click.option(
-    "--config",
-    "-c",
-    "cli_config",
-    type=CliPath(dir_okay=False, readable=True),
+    "--model",
+    "-m",
+    "model_dir",
+    type=CliPath(file_okay=False, readable=True),
     default=None,
-    help="The generator configuration file (defaults to <src>/model/config.yml)",
-)
-@click.option(
-    "--context",
-    "-ctx",
-    "context_file",
-    type=CliPath(dir_okay=False, readable=True),
-    default=None,
-    help="The TIM context configuration file (defaults to <src>/model/context.yml.j2",
-)
-@click.option(
-    "--file-config",
-    "-f",
-    "file_config",
-    type=CliPath(dir_okay=False, readable=True),
-    default=None,
-    help="The TIM template objects configuration file (defaults to <src>/model/templates.yml.j2",
+    help="The model directory for the TIM that is to be instantiated",
 )
 @click.option(
     "--seed",
@@ -163,9 +164,7 @@ def setup_tsm(
 @pass_info
 def apply(
     info: Info,
-    cli_config: Path,
-    context_file: Path,
-    file_config: Path,
+    model_dir: Optional[Path],
     seed: Optional[int],
     src: Union[Path, str],
     dest: Path,
@@ -173,20 +172,21 @@ def apply(
     """Apply and generate the template."""
 
     # setup default relative paths
-    if cli_config is None:
-        cli_config = Path("model/config.yml")
-    if context_file is None:
-        context_file = Path("model/context.yml.j2")
-    if file_config is None:
-        file_config = Path("model/templates.yml.j2")
+    if model_dir is None:
+        model_dir = Path("model")
+
+    model_dir = dest.joinpath(model_dir)
+
+    # config file paths
+    cli_config = model_dir.joinpath("config.yml")
+    context_file = model_dir.joinpath("context.yml.j2")
+    file_config = model_dir.joinpath("templates.yml.j2")
 
     repo: Repo = setup_repository(src, dest)
 
-    cli_config = dest.joinpath(cli_config)
     if cli_config.exists():
         with open(cli_config, "r") as f:
             config = Config(**load_config(f.read()))
-        # config = Config.parse_file(cli_config)
     else:
         config = Config()
 
@@ -200,7 +200,21 @@ def apply(
     generators = get_generators(config.plugin)
 
     # render context config template and load data
-    setup_tsm(config.seed, config.jinja, dest, generators, context_file, file_config)
+    (context, object_config) = setup_tsm(
+        config.seed,
+        config.jinja,
+        dest,
+        generators,
+        context_file.relative_to(dest),
+        file_config.relative_to(dest),
+    )
+
+    write_tsm_configs(model_dir, config, context, object_config)
 
     # placeholder for adding commit code later
-    print(repo)
+    repo.index.add("*")
+    repo.index.commit(f"Generate TSM with seed: '{seed}'")
+    click.echo(f"Created TSM in {dest}")
+    click.echo(
+        "You can now change to the directory and push TSM to a new GIT repository."
+    )

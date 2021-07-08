@@ -13,6 +13,7 @@ from typing import (
 from click import Path as ClickPath
 from git import Repo
 from git.exc import InvalidGitRepositoryError
+from pydantic.json import pydantic_encoder
 from ruamel.yaml import YAML
 from ruamel.yaml.error import YAMLError
 
@@ -70,6 +71,21 @@ def load_config(config: str) -> Any:
             return json.loads(config)
     else:
         return config
+
+
+def write_config(config: Any, dest: Path):
+    # need to dump to json first to support the additional types
+    # provided by pydantic
+    json_str = json.dumps(config, default=pydantic_encoder)
+
+    yaml = YAML(typ="safe")
+    yaml.indent(mapping=2, sequence=4, offset=2)
+    yaml.default_flow_style = False
+    yaml.sort_base_mapping_type_on_output = False
+
+    with open(dest, "w") as f:
+        obj = json.loads(json_str)
+        yaml.dump(obj, f)
 
 
 class TIMSource(ClickPath):
