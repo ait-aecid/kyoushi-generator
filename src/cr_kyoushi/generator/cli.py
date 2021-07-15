@@ -223,7 +223,7 @@ def apply(
 
     # placeholder for adding commit code later
     repo.index.add("*")
-    repo.index.commit(f"Generate TSM with seed: '{seed}'")
+    repo.index.commit(f"Generate TSM with seed: '{config.seed}'")
     click.echo(f"Created TSM in {dest}")
     click.echo(
         "You can now change to the directory and push TSM to a new GIT repository."
