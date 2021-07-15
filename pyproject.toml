@@ -12,6 +12,10 @@ packages = [
 ]
 
 [tool.poetry.plugins."cr_kyoushi.generator"]
+"random" = "cr_kyoushi.generator.core:RandomGenerator"
+"faker" = "cr_kyoushi.generator.core:FakerGenerator"
+"numpy" = "cr_kyoushi.generator.core:NumpyGenerator"
+
 
 [tool.poetry.dependencies]
 python = "^3.7"
@@ -26,13 +30,16 @@ pyshark = "^0.4.3"
 aiohttp = "^3.7.4"
 ujson = "^4.0.2"
 livereload = "^2.6.3"
+Faker = "^8.9.0"
+numpy = "^1.21.0"
+GitPython = "^3.1.18"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
 flake8 = "^3.8.4"
 pre-commit = "^2.9.0"
 black = "^20.8b1"
-mypy = "^0.790"
+mypy = "^0.910"
 pytest-cov = "^2.10.1"
 pytest-sugar = "^0.9.4"
 pytest-mock = "^3.5.1"
