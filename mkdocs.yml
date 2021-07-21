@@ -29,6 +29,8 @@ nav:
 - Overview: index.md
 - Contributing: contributing.md
 - License: license.md
+- API:
+  - Generators: reference/generators.md
 
 markdown_extensions:
     - admonition
