@@ -32,6 +32,7 @@ nav:
 - CLI: cli.md
 - API:
   - Generators: reference/generators.md
+  - Config: reference/config.md
 
 markdown_extensions:
     - admonition

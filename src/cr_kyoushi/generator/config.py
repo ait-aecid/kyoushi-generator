@@ -55,7 +55,23 @@ class JinjaConfig(BaseModel):
 
 
 class Config(BaseModel):
-    """Kyoushi Generator tool configuration model"""
+    """Kyoushi Generator tool configuration model
+
+    Examples:
+        ```yaml
+            seed: 1337
+            plugin:
+                include_names:
+                    - .*
+                exclude_names:
+                    - evil\\..*
+            jinja:
+                block_start: '\\{%'
+                block_end: '}'
+                variable_start: '\\var{'
+                variable_end: '}'
+        ```
+    """
 
     plugin: PluginConfig = Field(PluginConfig(), description="The plugin configuration")
     jinja: JinjaConfig = Field(
