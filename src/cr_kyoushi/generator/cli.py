@@ -62,18 +62,16 @@ class CliPath(click.Path):
 
 
 @click.group()
-@pass_info
-def cli(info: Info):
+def cli():
     """Run Cyber Range Kyoushi Generator."""
 
 
 @cli.command()
-@pass_info
-def version(info: Info):
+def version():
     """Get the library version."""
     from .utils import version_info
 
-    click.echo(version_info(cli_info=info))
+    click.echo(version_info())
 
 
 def setup_repository(src: Union[Path, str], dest: Path) -> Repo:
@@ -171,9 +169,7 @@ def write_tsm_configs(
 )
 @click.argument("src", type=TIMSource(exists=True, file_okay=False))
 @click.argument("dest", type=CliPath(exists=False, file_okay=False))
-@pass_info
 def apply(
-    info: Info,
     model_dir: Optional[Path],
     seed: Optional[int],
     src: Union[Path, str],
