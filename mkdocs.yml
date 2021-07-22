@@ -33,6 +33,7 @@ nav:
 - API:
   - Generators: reference/generators.md
   - Config: reference/config.md
+  - Plugin: reference/plugin.md
 
 markdown_extensions:
     - admonition
