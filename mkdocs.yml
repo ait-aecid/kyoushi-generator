@@ -35,6 +35,7 @@ nav:
   - Config: reference/config.md
   - Plugin: reference/plugin.md
   - Random: reference/random.md
+  - Template: reference/template.md
 
 markdown_extensions:
     - admonition
