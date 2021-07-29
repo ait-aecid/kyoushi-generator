@@ -100,15 +100,16 @@ def setup_tsm(
     context_file: Path,
     object_config_file: Path,
 ) -> Tuple[Dict[str, Any], List[Union[File, Directory]]]:
+    seed_store = SeedStore(seed)
     # env used for rendering the context variables
     context_env = create_context_environment(
-        SeedStore(seed), generators=generators, template_dirs=dest
+        seed_store, generators=generators, template_dirs=dest
     )
     # env used for rendering the template object configuration
     object_config_env = create_template_object_environment(template_dirs=dest)
     # env used for templating
     render_env = create_environment(
-        jinja_config, template_dirs=dest, generators=generators
+        seed_store, jinja_config, template_dirs=dest, generators=generators
     )
 
     # instantiate the TIM context model to a TSM context

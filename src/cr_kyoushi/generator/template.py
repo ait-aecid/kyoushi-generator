@@ -77,6 +77,16 @@ def create_template_object_environment(
     return env
 
 
+def _env_add_generators(
+    env: NativeEnvironment,
+    seed_store: SeedStore,
+    generators: List[Generator],
+):
+    for gen in generators:
+        gen_instance = gen.create(seed_store)
+        env.globals.update({gen.name: gen_instance})
+
+
 def create_context_environment(
     seed_store: SeedStore,
     generators: List[Generator] = [],
@@ -93,14 +103,13 @@ def create_context_environment(
         Jinja2 NativeEnvironment for rendering the TIM context.
     """
     env = create_template_object_environment(template_dirs)
-    for gen in generators:
-        gen_instance = gen.create(seed_store)
-        env.globals.update({gen.name: gen_instance})
+    _env_add_generators(env, seed_store, generators)
 
     return env
 
 
 def create_environment(
+    seed_store: SeedStore,
     config: JinjaConfig,
     template_dirs: Union[Text, Path, List[Union[Text, Path]]] = Path("./"),
     generators: List[Generator] = [],
@@ -130,6 +139,7 @@ def create_environment(
         extensions=["jinja2.ext.do", "jinja2.ext.loopcontrols"],
     )
     _add_env_options(env)
+    _env_add_generators(env, seed_store, generators)
 
     return env
 
