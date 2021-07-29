@@ -75,7 +75,7 @@ def version():
 
 
 def setup_repository(src: Union[Path, str], dest: Path) -> Repo:
-    repo: Repo
+    repo: Optional[Repo]
 
     # check if source is git repo or local path and copy it to TSM destination
     if isinstance(src, Path):

@@ -27,5 +27,3 @@ The `model` directory should contain the following three files:
   - `config.yml` (Optional): The CLI configuration file for configuring the Jinja environment for TIM templates and generator plugins.
   - `context.yml.j2`: Jinja2 templated TIM context configuration file. This file is used to define all static and randomizable TIM context variables. For this Jinja2 template syntax can be used to define complex TIM logic and random data generator plugins to define context variables.
   - `templates.yml.j2`: A Jinja2 templated configuration file for defining the list of TIM templates that should be rendered during the TSM conversion process. Within this is rendered based on the fully initialized TIM context as such it is possible to define template files based on randomized variables. For example creating a configuration file for each randomly generated user.
-
-### Example
