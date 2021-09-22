@@ -68,15 +68,15 @@ def _normalize_propabilities(
                         This makes the function slightly faster
 
     Raises:
-        ValueError: If the distribution sums to 0 or
-                    If one of the propability values is negative
+        Exception: If the distribution sums to 0 or
+                   If one of the propability values is negative
 
     Returns:
         The normalized probability distribution.
     """
     # only check when requested
     if check_positive and any(p < 0 for p in propabilities):
-        raise AnsibleFilterError(
+        raise Exception(
             f"Propabilities must be positive numbers, but got {propabilities}"
         )
 
@@ -109,8 +109,8 @@ def normalize_propabilities(propabilities, ignore=["extra"]):
         ignore (List[str], optional): Additional dict keys to ignore during normalization.
 
     Raises:
-        AnsibleFilterError: If the given distribution has an invalid container type, sums to 0
-                            or contains negative numbers.
+        Exception: If the given distribution has an invalid container type, sums to 0
+                   or contains negative numbers.
 
     Returns:
         The normalized distribution.
@@ -159,8 +159,8 @@ def normalize_probabilities_map(container, ignore=["extra"], skip=[]):
                                     which are not distributions.)
 
     Raises:
-        AnsibleFilterError: If the given distributions have an invalid container type, sum to 0
-                            or contain negative numbers.
+        Exception: If the given distributions have an invalid container type, sum to 0
+                   or contain negative numbers.
 
     Returns:
         The dictionary with all its distributions normalized.
