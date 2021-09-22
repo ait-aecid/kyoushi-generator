@@ -85,7 +85,7 @@ def _normalize_propabilities(
     if abs(1.0 - total) < 1e-8:
         # if we already have a normalized
         # distribution then we can just return it
-        return propabilities
+        return list(propabilities)
     elif total > 0:
         multiplier = 1.0 / total
         propabilities = [p * multiplier for p in propabilities]
