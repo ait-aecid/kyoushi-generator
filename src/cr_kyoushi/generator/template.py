@@ -1,3 +1,7 @@
+"""
+Module for TIM templating logic and classes.
+"""
+
 import shutil
 import sys
 
@@ -55,7 +59,15 @@ def _add_env_options(env: NativeEnvironment):
 
 def create_template_object_environment(
     template_dirs: Union[Text, Path, List[Union[Text, Path]]] = Path("./")
-):
+) -> NativeEnvironment:
+    """Creates the Jinja2 context for rendering the `templates.yml.j2` configuration.
+
+    Args:
+        template_dirs: The Jinja2 template directory.
+
+    Returns:
+        Jinja2 NativeEnvironment for rendering the templates configuration.
+    """
     env = NativeEnvironment(
         loader=FileSystemLoader(template_dirs),
         undefined=StrictUndefined,
@@ -65,24 +77,53 @@ def create_template_object_environment(
     return env
 
 
+def _env_add_generators(
+    env: NativeEnvironment,
+    seed_store: SeedStore,
+    generators: List[Generator],
+):
+    for gen in generators:
+        gen_instance = gen.create(seed_store)
+        env.globals.update({gen.name: gen_instance})
+
+
 def create_context_environment(
     seed_store: SeedStore,
     generators: List[Generator] = [],
     template_dirs: Union[Text, Path, List[Union[Text, Path]]] = Path("./"),
-):
+) -> NativeEnvironment:
+    """Creates the Jinja2 context for rendering the TIM context configuration.
+
+    Args:
+        seed_store: The seed store to use for generating PRNG seeds.
+        generators: The random data generators to make available in the Jinja2 context
+        template_dirs: The Jinja2 template directory.
+
+    Returns:
+        Jinja2 NativeEnvironment for rendering the TIM context.
+    """
     env = create_template_object_environment(template_dirs)
-    for gen in generators:
-        gen_instance = gen.create(seed_store)
-        env.globals.update({gen.name: gen_instance})
+    _env_add_generators(env, seed_store, generators)
 
     return env
 
 
 def create_environment(
+    seed_store: SeedStore,
     config: JinjaConfig,
     template_dirs: Union[Text, Path, List[Union[Text, Path]]] = Path("./"),
     generators: List[Generator] = [],
-):
+) -> NativeEnvironment:
+    """Creates the Jinja2 context for rendering the TIM templates.
+
+    Args:
+        config: The Jinja2 configuration.
+        template_dirs: The Jinja2 template directory.
+        generators: The random data generators to make available in the Jinja2 context
+
+    Returns:
+        Jinja2 NativeEnvironment for rendering the TIM.
+    """
     env = NativeEnvironment(
         loader=FileSystemLoader(template_dirs),
         block_start_string=config.block_start,
@@ -98,11 +139,26 @@ def create_environment(
         extensions=["jinja2.ext.do", "jinja2.ext.loopcontrols"],
     )
     _add_env_options(env)
+    _env_add_generators(env, seed_store, generators)
 
     return env
 
 
-def render_template(env: NativeEnvironment, template: Union[Text, Path], context: Any):
+def render_template(
+    env: NativeEnvironment,
+    template: Union[Text, Path],
+    context: Any,
+) -> Any:
+    """Utility function for rendering Jinja2 text or file templates.
+
+    Args:
+        env: The Jinja2 environment to use for rendering
+        template: The template string or file to render
+        context: The context variables to use for rendering
+
+    Returns:
+        The rendered template string or data structure
+    """
     # convert strings to template
     if isinstance(template, Path):
         _template = env.get_template(str(template))
@@ -116,6 +172,14 @@ def render_template(env: NativeEnvironment, template: Union[Text, Path], context
 
 
 def write_template(env: NativeEnvironment, src: Path, dest: Path, context: Any):
+    """Utility function for rendering and writing a template file.
+
+    Args:
+        env: The Jinja2 environment to use for rendering
+        src: The template file path
+        dest: The path to write the rendered template to
+        context: The context variables to use for rendering
+    """
     template_rendered = render_template(env, src, context)
     with open(dest, "w") as f:
         # mappings and lists are output as yaml files
@@ -131,6 +195,8 @@ def write_template(env: NativeEnvironment, src: Path, dest: Path, context: Any):
 
 
 class BaseObject(BaseModel):
+    """Base model for template configuration models"""
+
     name: str = Field(
         ..., description="A descriptive name for the file template directive"
     )
@@ -141,11 +207,16 @@ class BaseObject(BaseModel):
     )
 
     def dict(self, **kwargs):
+        # set by alias to true by default
+        # to ensure that template object fields are always serialized based
+        # on their alias names
         kwargs.setdefault("by_alias", True)
         return super().dict(**kwargs)
 
 
 class BaseFileObject(BaseObject):
+    """Base model for file/directory type template objects"""
+
     src: str = Field(
         ...,
         description="The template source path (relative to the containing directory)",
@@ -163,10 +234,14 @@ class BaseFileObject(BaseObject):
 
 
 class File(BaseFileObject):
+    """File template model for configuring TIM template files"""
+
     type_: Literal["file"] = Field("file", alias="type")
 
 
 class Directory(BaseFileObject):
+    """Directory template model for configuring TIM template directories"""
+
     type_: Literal["dir"] = Field("dir", alias="type")
 
     copy_: List[str] = Field(
@@ -184,6 +259,11 @@ Directory.update_forward_refs()
 
 
 def get_yaml() -> YAML:
+    """Utility function for creating a YAML parser and serializer.
+
+    Returns:
+        A ruamel.yaml.YAML object
+    """
     yaml = YAML(typ="safe")
     for g in [File, Directory]:
         yaml.register_class(g)
@@ -191,6 +271,15 @@ def get_yaml() -> YAML:
 
 
 def validate_object_list(object_list) -> List[Union[File, Directory]]:
+    """Utility function for validating template object model lists.
+
+    Args:
+        object_list: List of unvalidated template object models.
+
+    Returns:
+        A validated list of template object models converted to the correct
+        Python classes.
+    """
     return parse_obj_as(
         Annotated[List[Union[File, Directory]], Field(discriminator="type")],
         object_list,
@@ -207,6 +296,25 @@ def render_tim(
     delete_dirs: Optional[Deque[Path]] = None,
     delete_files: Optional[Deque[Path]] = None,
 ) -> Tuple[Deque[Path], Deque[Path]]:
+    """Function for rendering a TIM using the context and template configuration.
+
+    Args:
+        env: The TIM Jinja2 environment.
+        object_list: The list of template objects to render for the TIM.
+        src_dir: The current source directory for template objects.
+        dest_dir: The current destination directory for rendered templates.
+        global_context: The global TIM context.
+        parent_context: The TIM context specific to the parent template objects.
+        delete_dirs: LiFo queue of directories to delete at the end of render process.
+        delete_files: LiFo queue of files to delete at the end of render process.
+
+    Raises:
+        NotImplementedError: If the raw object_list contains an unknown template object type
+
+    Returns:
+        The final `delete_dirs` and `delete_files` queues as tuple `(delete_dirs, delete_files)`
+    """
+
     if delete_dirs is None:
         delete_dirs = deque()
     if delete_files is None:

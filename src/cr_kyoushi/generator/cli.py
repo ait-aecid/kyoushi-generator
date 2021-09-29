@@ -62,22 +62,20 @@ class CliPath(click.Path):
 
 
 @click.group()
-@pass_info
-def cli(info: Info):
+def cli():
     """Run Cyber Range Kyoushi Generator."""
 
 
 @cli.command()
-@pass_info
-def version(info: Info):
+def version():
     """Get the library version."""
     from .utils import version_info
 
-    click.echo(version_info(cli_info=info))
+    click.echo(version_info())
 
 
 def setup_repository(src: Union[Path, str], dest: Path) -> Repo:
-    repo: Repo
+    repo: Optional[Repo]
 
     # check if source is git repo or local path and copy it to TSM destination
     if isinstance(src, Path):
@@ -102,15 +100,16 @@ def setup_tsm(
     context_file: Path,
     object_config_file: Path,
 ) -> Tuple[Dict[str, Any], List[Union[File, Directory]]]:
+    seed_store = SeedStore(seed)
     # env used for rendering the context variables
     context_env = create_context_environment(
-        SeedStore(seed), generators=generators, template_dirs=dest
+        seed_store, generators=generators, template_dirs=dest
     )
     # env used for rendering the template object configuration
     object_config_env = create_template_object_environment(template_dirs=dest)
     # env used for templating
     render_env = create_environment(
-        jinja_config, template_dirs=dest, generators=generators
+        seed_store, jinja_config, template_dirs=dest, generators=generators
     )
 
     # instantiate the TIM context model to a TSM context
@@ -171,9 +170,7 @@ def write_tsm_configs(
 )
 @click.argument("src", type=TIMSource(exists=True, file_okay=False))
 @click.argument("dest", type=CliPath(exists=False, file_okay=False))
-@pass_info
 def apply(
-    info: Info,
     model_dir: Optional[Path],
     seed: Optional[int],
     src: Union[Path, str],
