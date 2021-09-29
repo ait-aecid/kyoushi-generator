@@ -1,7 +1,4 @@
 # Cyber Range Kyoushi - Generator
-[![Pipeline Info](https://git-service.ait.ac.at/sct-cyberrange/tools/kyoushi/generator/badges/master/pipeline.svg)](https://git-service.ait.ac.at/sct-cyberrange/tools/kyoushi/generator/-/pipelines/latest)
-[![Coverage Report](https://git-service.ait.ac.at/sct-cyberrange/tools/kyoushi/generator/badges/master/coverage.svg?style=flat)](https://git-service.ait.ac.at/sct-cyberrange/tools/kyoushi/generator/)
-[![Latest Offline Docs](https://img.shields.io/badge/latest-Offline%20Docs-ceb48a)](https://git-service.ait.ac.at/sct-cyberrange/tools/kyoushi/generator/-/jobs/artifacts/master/raw/offline-docs.tar.gz?job=pages)
 
 The Cyber Range Kyoushi Generator package provides a CLI tool that can be used to create randomized *Template Specific Models* (TSM) from *Template Independent Models* (TIM). TIMs can loaded either from GIT repositories or from the local file system. An existing TIM can be created running the following command (passing the seed parameter ensures reproducibility):
 
