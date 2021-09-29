@@ -5,6 +5,7 @@ This module contains the configuration model descriptions for the tool.
 import re
 
 from typing import (
+    Dict,
     List,
     Optional,
     Pattern,
@@ -13,6 +14,7 @@ from typing import (
 from pydantic import (
     BaseModel,
     Field,
+    StrictStr,
 )
 
 
@@ -54,6 +56,27 @@ class JinjaConfig(BaseModel):
     )
 
 
+class Input(BaseModel):
+    model: str = Field(
+        ..., description="The python type hint to use for loading this input"
+    )
+    required: bool = Field(False, description="If the input is required or not.")
+    prompt: Optional[str] = Field(
+        None,
+        description="The input prompt message to use when the required input is not passed via CLI.",
+    )
+    description: Optional[str] = Field(
+        None, description="A textual description of the input variable"
+    )
+    value: Optional[str] = Field(
+        None, description="The string encoded value assigned to the input"
+    )
+
+
+class InputName(StrictStr):
+    regex = re.compile(r"^[\w\d-]*$")
+
+
 class Config(BaseModel):
     """Kyoushi Generator tool configuration model
 
@@ -70,6 +93,12 @@ class Config(BaseModel):
                 block_end: '}'
                 variable_start: '\\var{'
                 variable_end: '}'
+            inputs:
+                employee_count:
+                    model: int
+                    required: true
+                    description: Number of employees that should be simulated in the testbed.
+                    prompt: Please enter the number of employees that should be created
         ```
     """
 
@@ -80,4 +109,8 @@ class Config(BaseModel):
     seed: Optional[int] = Field(
         None,
         description="A hard coded seed to use for instance creation with this model. Can be overwritten by CLI arguments.",
+    )
+    inputs: Dict[InputName, Input] = Field(
+        {},
+        description="The TIMs input definitions used for receiving variables from the CLI",
     )
