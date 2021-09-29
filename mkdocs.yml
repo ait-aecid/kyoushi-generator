@@ -29,6 +29,14 @@ nav:
 - Overview: index.md
 - Contributing: contributing.md
 - License: license.md
+- CLI: cli.md
+- API:
+  - Generators: reference/generators.md
+  - Config: reference/config.md
+  - Plugin: reference/plugin.md
+  - Random: reference/random.md
+  - Template: reference/template.md
+  - Utils: reference/utils.md
 
 markdown_extensions:
     - admonition

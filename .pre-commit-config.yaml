@@ -2,7 +2,7 @@
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
 -   repo: https://github.com/psf/black
-    rev: 21.6b0
+    rev: 21.9b0
     hooks:
     - id: black
       language_version: python3.7
@@ -22,10 +22,10 @@ repos:
     rev: v0.910
     hooks:
     -   id: mypy
-        additional_dependencies: [pydantic, ruamel.yaml]
+        additional_dependencies: [pydantic, ruamel.yaml, importlib-metadata]
 
 - repo: https://github.com/timothycrosley/isort
-  rev: 5.9.2
+  rev: 5.9.3
   hooks:
   - id: isort
     additional_dependencies: [toml]
