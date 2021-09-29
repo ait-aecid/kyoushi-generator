@@ -84,9 +84,11 @@ def _check_plugin_allowed(
     """
     if (
         # entry point name must be in an include pattern
-        any([pattern.match(ep.name) for pattern in plugin_config.include_names])
+        any(
+            [pattern.match(ep.name) for pattern in plugin_config.include_names]  # type: ignore
+        )
         # and not be excluded
-        and not any([pattern.match(ep.name) for pattern in plugin_config.exclude_names])
+        and not any([pattern.match(ep.name) for pattern in plugin_config.exclude_names])  # type: ignore
     ):
         class_ = ep.load()
         if (
