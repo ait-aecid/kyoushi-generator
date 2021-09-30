@@ -9,6 +9,7 @@ from typing import (
     List,
     Optional,
     Pattern,
+    Union,
 )
 
 from pydantic import (
@@ -56,6 +57,10 @@ class JinjaConfig(BaseModel):
     )
 
 
+class MissingInput(BaseModel):
+    pass
+
+
 class Input(BaseModel):
     model: str = Field(
         ..., description="The python type hint to use for loading this input"
@@ -68,8 +73,10 @@ class Input(BaseModel):
     description: Optional[str] = Field(
         None, description="A textual description of the input variable"
     )
-    value: Optional[str] = Field(
-        None, description="The string encoded value assigned to the input"
+    value: Union[str, MissingInput] = Field(
+        MissingInput(),
+        description="The json encoded value assigned to the input",
+        alias="default",
     )
 
 
