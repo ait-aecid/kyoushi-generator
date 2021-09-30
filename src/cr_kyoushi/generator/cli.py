@@ -1,5 +1,7 @@
+import re
 import shutil
 
+from json import JSONDecodeError
 from pathlib import Path
 from typing import (
     Any,
@@ -13,10 +15,15 @@ from typing import (
 import click
 
 from git import Repo
+from pydantic import (
+    parse_obj_as,
+    parse_raw_as,
+)
 
 from .config import (
     Config,
     JinjaConfig,
+    MissingInput,
 )
 from .plugin import (
     Generator,
@@ -61,6 +68,22 @@ class CliPath(click.Path):
         return Path(super().convert(value, param, ctx))
 
 
+def validate_var(ctx: click.Context, param: str, value: str):
+    input_vars = {}
+    errors = []
+    for var in value:
+        match = re.match(r"^([\w\d-]*)=(.*)", var)
+        if match:
+            input_vars[match.group(1)] = match.group(2)
+        else:
+            errors.append(var)
+
+    if len(errors) > 0:
+        raise click.BadParameter(f"Invalid var definitions: {errors}")
+
+    return input_vars
+
+
 @click.group()
 def cli():
     """Run Cyber Range Kyoushi Generator."""
@@ -95,6 +118,7 @@ def setup_repository(src: Union[Path, str], dest: Path) -> Repo:
 def setup_tsm(
     seed: int,
     jinja_config: JinjaConfig,
+    inputs: Dict[str, Any],
     dest: Path,
     generators: List[Generator],
     context_file: Path,
@@ -113,11 +137,19 @@ def setup_tsm(
     )
 
     # instantiate the TIM context model to a TSM context
-    context = load_config(render_template(context_env, context_file, {}))
+    context = load_config(
+        render_template(context_env, context_file, {"inputs": inputs})
+    )
 
     # render object config -> load as python data types -> validate and transform to pydantic model list
     object_config = validate_object_list(
-        load_config(render_template(object_config_env, object_config_file, context))
+        load_config(
+            render_template(
+                object_config_env,
+                object_config_file,
+                {"context": context, "inputs": inputs},
+            )
+        )
     )
 
     (delete_dirs, delete_files) = render_tim(
@@ -125,6 +157,7 @@ def setup_tsm(
         object_config,
         Path("."),
         dest,
+        inputs,
         context,
     )
 
@@ -168,11 +201,13 @@ def write_tsm_configs(
     type=click.INT,
     help="Global seed for PRNGs used during context generation",
 )
+@click.option("--var", multiple=True, callback=validate_var)
 @click.argument("src", type=TIMSource(exists=True, file_okay=False))
 @click.argument("dest", type=CliPath(exists=False, file_okay=False))
 def apply(
     model_dir: Optional[Path],
     seed: Optional[int],
+    var: Dict[str, str],
     src: Union[Path, str],
     dest: Path,
 ):
@@ -204,12 +239,36 @@ def apply(
     else:
         config.seed = seed
 
+    inputs: Dict[str, Any] = {}
+    missing_inputs = []
+    # load the defined input variables
+    for _id, _input in config.inputs.items():
+        if _id in var:
+            _input.value = var[_id]
+
+        if not isinstance(_input.value, MissingInput):
+            # ignoring typing for parse function since annotation only accepts type hint objects
+            # but code also allows type hint strings
+            try:
+                inputs[_id] = parse_raw_as(_input.model, _input.value)  # type: ignore
+            except JSONDecodeError:
+                # for convenience we allow to pass strings as is
+                # without requiring sourunding double quotes
+                inputs[_id] = parse_obj_as(_input.model, _input.value)  # type: ignore
+        elif _input.required:
+            missing_inputs.append(_id)
+
+    if len(missing_inputs) > 0:
+        click.echo(f"Missing required input variables: {missing_inputs}", err=True)
+        exit(2)
+
     generators = get_generators(config.plugin)
 
     # render context config template and load data
     (context, object_config) = setup_tsm(
         config.seed,
         config.jinja,
+        inputs,
         dest,
         generators,
         context_file.relative_to(dest),

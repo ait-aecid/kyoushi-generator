@@ -447,6 +447,7 @@ def render_tim(
     object_list: List[Union[File, Directory]],
     src_dir: Path,
     dest_dir: Path,
+    inputs: Dict[str, Any],
     global_context: Dict[str, Any],
     parent_context: Dict[str, Any] = {},
     delete_dirs: Optional[Deque[Path]] = None,
@@ -503,6 +504,7 @@ def render_tim(
                 obj.contents,
                 src,
                 dest,
+                inputs,
                 global_context,
                 new_parent_context,
                 delete_dirs,
@@ -511,6 +513,7 @@ def render_tim(
 
         elif isinstance(obj, File):
             context = {
+                "inputs": inputs,
                 "context": global_context,
                 "parent_context": parent_context,
                 "local_context": obj.extra,
