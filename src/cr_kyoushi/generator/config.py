@@ -66,10 +66,6 @@ class Input(BaseModel):
         ..., description="The python type hint to use for loading this input"
     )
     required: bool = Field(False, description="If the input is required or not.")
-    prompt: Optional[str] = Field(
-        None,
-        description="The input prompt message to use when the required input is not passed via CLI.",
-    )
     description: Optional[str] = Field(
         None, description="A textual description of the input variable"
     )
