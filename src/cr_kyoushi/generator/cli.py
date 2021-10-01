@@ -22,6 +22,8 @@ from pydantic import (
 
 from .config import (
     Config,
+    InputDict,
+    InputVarsDict,
     JinjaConfig,
     MissingInput,
 )
@@ -69,8 +71,8 @@ class CliPath(click.Path):
 
 
 def validate_var(ctx: click.Context, param: str, value: str):
-    input_vars = {}
-    errors = []
+    input_vars: Dict[str, str] = {}
+    errors: List[str] = []
     for var in value:
         match = re.match(r"^([\w\d-]*)=(.*)", var)
         if match:
@@ -82,6 +84,42 @@ def validate_var(ctx: click.Context, param: str, value: str):
         raise click.BadParameter(f"Invalid var definitions: {errors}")
 
     return input_vars
+
+
+def validate_var_file(ctx: click.Context, param: str, value: str):
+    input_vars: InputVarsDict = {}
+    for file_path in value:
+        with open(file_path, "r") as var_file:
+            var_file_raw = var_file.read()
+            if len(var_file_raw.strip()) > 0:
+                var_file_content: Dict[str, str] = load_config(var_file_raw)
+                input_vars.update(parse_obj_as(InputVarsDict, var_file_content))
+
+    return input_vars
+
+
+def convert_input_vars(
+    inputs_config: InputDict, input_vars: InputVarsDict
+) -> Tuple[Dict[str, Any], List[str]]:
+    inputs: Dict[str, Any] = {}
+    missing_inputs: List[str] = []
+    # load the defined input variables
+    for _id, _input in inputs_config.items():
+        if _id in input_vars:
+            _input.value = input_vars[_id]
+
+        if not isinstance(_input.value, MissingInput):
+            # ignoring typing for parse function since annotation only accepts type hint objects
+            # but code also allows type hint strings
+            try:
+                inputs[_id] = parse_raw_as(_input.model, _input.value)  # type: ignore
+            except JSONDecodeError:
+                # for convenience we allow to pass strings as is
+                # without requiring sourunding double quotes
+                inputs[_id] = parse_obj_as(_input.model, _input.value)  # type: ignore
+        elif _input.required:
+            missing_inputs.append(_id)
+    return (inputs, missing_inputs)
 
 
 @click.group()
@@ -202,12 +240,19 @@ def write_tsm_configs(
     help="Global seed for PRNGs used during context generation",
 )
 @click.option("--var", multiple=True, callback=validate_var)
+@click.option(
+    "--var-file",
+    multiple=True,
+    type=CliPath(exists=True, file_okay=True, dir_okay=False),
+    callback=validate_var_file,
+)
 @click.argument("src", type=TIMSource(exists=True, file_okay=False))
 @click.argument("dest", type=CliPath(exists=False, file_okay=False))
 def apply(
     model_dir: Optional[Path],
     seed: Optional[int],
-    var: Dict[str, str],
+    var: InputVarsDict,
+    var_file: InputVarsDict,
     src: Union[Path, str],
     dest: Path,
 ):
@@ -239,24 +284,10 @@ def apply(
     else:
         config.seed = seed
 
-    inputs: Dict[str, Any] = {}
-    missing_inputs = []
-    # load the defined input variables
-    for _id, _input in config.inputs.items():
-        if _id in var:
-            _input.value = var[_id]
+    input_vars = var_file.copy()
+    input_vars.update(var)
 
-        if not isinstance(_input.value, MissingInput):
-            # ignoring typing for parse function since annotation only accepts type hint objects
-            # but code also allows type hint strings
-            try:
-                inputs[_id] = parse_raw_as(_input.model, _input.value)  # type: ignore
-            except JSONDecodeError:
-                # for convenience we allow to pass strings as is
-                # without requiring sourunding double quotes
-                inputs[_id] = parse_obj_as(_input.model, _input.value)  # type: ignore
-        elif _input.required:
-            missing_inputs.append(_id)
+    (inputs, missing_inputs) = convert_input_vars(config.inputs, input_vars)
 
     if len(missing_inputs) > 0:
         click.echo(f"Missing required input variables: {missing_inputs}", err=True)

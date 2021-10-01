@@ -84,6 +84,10 @@ class InputName(StrictStr):
     regex = re.compile(r"^[\w\d-]*$")
 
 
+InputVarsDict = Dict[InputName, str]
+InputDict = Dict[InputName, Input]
+
+
 class Config(BaseModel):
     """Kyoushi Generator tool configuration model
 
@@ -117,7 +121,7 @@ class Config(BaseModel):
         None,
         description="A hard coded seed to use for instance creation with this model. Can be overwritten by CLI arguments.",
     )
-    inputs: Dict[InputName, Input] = Field(
+    inputs: InputDict = Field(
         {},
         description="The TIMs input definitions used for receiving variables from the CLI",
     )
