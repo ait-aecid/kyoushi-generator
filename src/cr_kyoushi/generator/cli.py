@@ -100,13 +100,15 @@ def validate_var_file(ctx: click.Context, param: str, value: str):
 
 def convert_input_vars(
     inputs_config: InputDict, input_vars: InputVarsDict
-) -> Tuple[Dict[str, Any], List[str]]:
+) -> Tuple[Dict[str, Any], List[str], List[str]]:
     inputs: Dict[str, Any] = {}
     missing_inputs: List[str] = []
+
     # load the defined input variables
     for _id, _input in inputs_config.items():
+        print(f"processing {_id}")
         if _id in input_vars:
-            _input.value = input_vars[_id]
+            _input.value = input_vars.pop(_id)
 
         if not isinstance(_input.value, MissingInput):
             # ignoring typing for parse function since annotation only accepts type hint objects
@@ -119,7 +121,10 @@ def convert_input_vars(
                 inputs[_id] = parse_obj_as(_input.model, _input.value)  # type: ignore
         elif _input.required:
             missing_inputs.append(_id)
-    return (inputs, missing_inputs)
+
+    unused_inputs: List[str] = list(input_vars.keys())
+
+    return (inputs, missing_inputs, unused_inputs)
 
 
 @click.group()
@@ -287,11 +292,16 @@ def apply(
     input_vars = var_file.copy()
     input_vars.update(var)
 
-    (inputs, missing_inputs) = convert_input_vars(config.inputs, input_vars)
+    (inputs, missing_inputs, unused_inputs) = convert_input_vars(
+        config.inputs, input_vars
+    )
 
     if len(missing_inputs) > 0:
         click.echo(f"Missing required input variables: {missing_inputs}", err=True)
         exit(2)
+
+    if len(unused_inputs) > 0:
+        click.secho(f"Unused input variables: {unused_inputs}", fg="yellow")
 
     generators = get_generators(config.plugin)
 
