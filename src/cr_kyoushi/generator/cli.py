@@ -106,7 +106,6 @@ def convert_input_vars(
 
     # load the defined input variables
     for _id, _input in inputs_config.items():
-        print(f"processing {_id}")
         if _id in input_vars:
             _input.value = input_vars.pop(_id)
 
