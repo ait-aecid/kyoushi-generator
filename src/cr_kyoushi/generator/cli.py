@@ -325,3 +325,51 @@ def apply(
     click.echo(
         "You can now change to the directory and push TSM to a new GIT repository."
     )
+
+
+@cli.command()
+@click.option(
+    "--model",
+    "-m",
+    "model_dir",
+    type=CliPath(file_okay=False, readable=True),
+    default=None,
+    help="The model directory for the TIM that is to be instantiated",
+)
+@click.argument("src", type=TIMSource(exists=True, file_okay=False))
+def inspect(model_dir: Optional[Path], src: Union[Path, str]):
+    # setup default relative paths
+    if model_dir is None:
+        model_dir = Path("model")
+
+    if isinstance(src, str):
+        src = Path(src)
+
+    model_dir = src.joinpath(model_dir)
+
+    # config file paths
+    cli_config = model_dir.joinpath("config.yml")
+
+    if cli_config.exists():
+        with open(cli_config, "r") as f:
+            config = Config(**load_config(f.read()))
+    else:
+        config = Config()
+
+    click.secho(f"Input variables for {str(src)}:", bold=True, underline=True)
+
+    for _id, _input in config.inputs.items():
+        click.secho(f"\t{_id}", nl=False, bold=True)
+        if _input.required:
+            click.secho(" (required)", fg="bright_magenta", nl=False)
+        else:
+            click.secho(" (optional)", fg="bright_green", nl=False)
+        click.secho(f" {_input.model}", fg="cyan", nl=False)
+        click.secho(":", bold=True)
+        if not isinstance(_input.value, MissingInput):
+            click.echo("\t  default: ", nl=False)
+            click.echo(_input.value)
+        if _input.description is not None:
+            for _line in _input.description.splitlines():
+                click.secho(f"\t  {_line}", dim=True)
+        click.echo()
