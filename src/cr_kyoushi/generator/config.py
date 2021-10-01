@@ -75,6 +75,9 @@ class Input(BaseModel):
         alias="default",
     )
 
+    class Config:
+        allow_population_by_field_name = True
+
 
 class InputName(StrictStr):
     regex = re.compile(r"^[\w\d-]*$")
