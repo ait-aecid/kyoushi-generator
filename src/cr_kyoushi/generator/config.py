@@ -5,14 +5,17 @@ This module contains the configuration model descriptions for the tool.
 import re
 
 from typing import (
+    Dict,
     List,
     Optional,
     Pattern,
+    Union,
 )
 
 from pydantic import (
     BaseModel,
     Field,
+    StrictStr,
 )
 
 
@@ -54,6 +57,36 @@ class JinjaConfig(BaseModel):
     )
 
 
+class MissingInput(BaseModel):
+    pass
+
+
+class Input(BaseModel):
+    model: str = Field(
+        ..., description="The python type hint to use for loading this input"
+    )
+    required: bool = Field(False, description="If the input is required or not.")
+    description: Optional[str] = Field(
+        None, description="A textual description of the input variable"
+    )
+    value: Union[str, MissingInput] = Field(
+        MissingInput(),
+        description="The json encoded value assigned to the input",
+        alias="default",
+    )
+
+    class Config:
+        allow_population_by_field_name = True
+
+
+class InputName(StrictStr):
+    regex = re.compile(r"^[\w\d-]*$")
+
+
+InputVarsDict = Dict[InputName, str]
+InputDict = Dict[InputName, Input]
+
+
 class Config(BaseModel):
     """Kyoushi Generator tool configuration model
 
@@ -70,6 +103,12 @@ class Config(BaseModel):
                 block_end: '}'
                 variable_start: '\\var{'
                 variable_end: '}'
+            inputs:
+                employee_count:
+                    model: int
+                    required: true
+                    description: Number of employees that should be simulated in the testbed.
+                    prompt: Please enter the number of employees that should be created
         ```
     """
 
@@ -80,4 +119,8 @@ class Config(BaseModel):
     seed: Optional[int] = Field(
         None,
         description="A hard coded seed to use for instance creation with this model. Can be overwritten by CLI arguments.",
+    )
+    inputs: InputDict = Field(
+        {},
+        description="The TIMs input definitions used for receiving variables from the CLI",
     )

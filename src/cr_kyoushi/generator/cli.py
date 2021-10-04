@@ -1,5 +1,7 @@
+import re
 import shutil
 
+from json import JSONDecodeError
 from pathlib import Path
 from typing import (
     Any,
@@ -13,10 +15,17 @@ from typing import (
 import click
 
 from git import Repo
+from pydantic import (
+    parse_obj_as,
+    parse_raw_as,
+)
 
 from .config import (
     Config,
+    InputDict,
+    InputVarsDict,
     JinjaConfig,
+    MissingInput,
 )
 from .plugin import (
     Generator,
@@ -61,6 +70,62 @@ class CliPath(click.Path):
         return Path(super().convert(value, param, ctx))
 
 
+def validate_var(ctx: click.Context, param: str, value: str):
+    input_vars: Dict[str, str] = {}
+    errors: List[str] = []
+    for var in value:
+        match = re.match(r"^([\w\d-]*)=(.*)", var)
+        if match:
+            input_vars[match.group(1)] = match.group(2)
+        else:
+            errors.append(var)
+
+    if len(errors) > 0:
+        raise click.BadParameter(f"Invalid var definitions: {errors}")
+
+    return input_vars
+
+
+def validate_var_file(ctx: click.Context, param: str, value: str):
+    input_vars: InputVarsDict = {}
+    for file_path in value:
+        with open(file_path, "r") as var_file:
+            var_file_raw = var_file.read()
+            if len(var_file_raw.strip()) > 0:
+                var_file_content: Dict[str, str] = load_config(var_file_raw)
+                input_vars.update(parse_obj_as(InputVarsDict, var_file_content))
+
+    return input_vars
+
+
+def convert_input_vars(
+    inputs_config: InputDict, input_vars: InputVarsDict
+) -> Tuple[Dict[str, Any], List[str], List[str]]:
+    inputs: Dict[str, Any] = {}
+    missing_inputs: List[str] = []
+
+    # load the defined input variables
+    for _id, _input in inputs_config.items():
+        if _id in input_vars:
+            _input.value = input_vars.pop(_id)
+
+        if not isinstance(_input.value, MissingInput):
+            # ignoring typing for parse function since annotation only accepts type hint objects
+            # but code also allows type hint strings
+            try:
+                inputs[_id] = parse_raw_as(_input.model, _input.value)  # type: ignore
+            except JSONDecodeError:
+                # for convenience we allow to pass strings as is
+                # without requiring sourunding double quotes
+                inputs[_id] = parse_obj_as(_input.model, _input.value)  # type: ignore
+        elif _input.required:
+            missing_inputs.append(_id)
+
+    unused_inputs: List[str] = list(input_vars.keys())
+
+    return (inputs, missing_inputs, unused_inputs)
+
+
 @click.group()
 def cli():
     """Run Cyber Range Kyoushi Generator."""
@@ -95,6 +160,7 @@ def setup_repository(src: Union[Path, str], dest: Path) -> Repo:
 def setup_tsm(
     seed: int,
     jinja_config: JinjaConfig,
+    inputs: Dict[str, Any],
     dest: Path,
     generators: List[Generator],
     context_file: Path,
@@ -113,11 +179,19 @@ def setup_tsm(
     )
 
     # instantiate the TIM context model to a TSM context
-    context = load_config(render_template(context_env, context_file, {}))
+    context = load_config(
+        render_template(context_env, context_file, {"inputs": inputs})
+    )
 
     # render object config -> load as python data types -> validate and transform to pydantic model list
     object_config = validate_object_list(
-        load_config(render_template(object_config_env, object_config_file, context))
+        load_config(
+            render_template(
+                object_config_env,
+                object_config_file,
+                {"context": context, "inputs": inputs},
+            )
+        )
     )
 
     (delete_dirs, delete_files) = render_tim(
@@ -125,6 +199,7 @@ def setup_tsm(
         object_config,
         Path("."),
         dest,
+        inputs,
         context,
     )
 
@@ -168,11 +243,20 @@ def write_tsm_configs(
     type=click.INT,
     help="Global seed for PRNGs used during context generation",
 )
+@click.option("--var", multiple=True, callback=validate_var)
+@click.option(
+    "--var-file",
+    multiple=True,
+    type=CliPath(exists=True, file_okay=True, dir_okay=False),
+    callback=validate_var_file,
+)
 @click.argument("src", type=TIMSource(exists=True, file_okay=False))
 @click.argument("dest", type=CliPath(exists=False, file_okay=False))
 def apply(
     model_dir: Optional[Path],
     seed: Optional[int],
+    var: InputVarsDict,
+    var_file: InputVarsDict,
     src: Union[Path, str],
     dest: Path,
 ):
@@ -204,12 +288,27 @@ def apply(
     else:
         config.seed = seed
 
+    input_vars = var_file.copy()
+    input_vars.update(var)
+
+    (inputs, missing_inputs, unused_inputs) = convert_input_vars(
+        config.inputs, input_vars
+    )
+
+    if len(missing_inputs) > 0:
+        click.echo(f"Missing required input variables: {missing_inputs}", err=True)
+        exit(2)
+
+    if len(unused_inputs) > 0:
+        click.secho(f"Unused input variables: {unused_inputs}", fg="yellow")
+
     generators = get_generators(config.plugin)
 
     # render context config template and load data
     (context, object_config) = setup_tsm(
         config.seed,
         config.jinja,
+        inputs,
         dest,
         generators,
         context_file.relative_to(dest),
@@ -225,3 +324,51 @@ def apply(
     click.echo(
         "You can now change to the directory and push TSM to a new GIT repository."
     )
+
+
+@cli.command()
+@click.option(
+    "--model",
+    "-m",
+    "model_dir",
+    type=CliPath(file_okay=False, readable=True),
+    default=None,
+    help="The model directory for the TIM that is to be instantiated",
+)
+@click.argument("src", type=TIMSource(exists=True, file_okay=False))
+def inspect(model_dir: Optional[Path], src: Union[Path, str]):
+    # setup default relative paths
+    if model_dir is None:
+        model_dir = Path("model")
+
+    if isinstance(src, str):
+        src = Path(src)
+
+    model_dir = src.joinpath(model_dir)
+
+    # config file paths
+    cli_config = model_dir.joinpath("config.yml")
+
+    if cli_config.exists():
+        with open(cli_config, "r") as f:
+            config = Config(**load_config(f.read()))
+    else:
+        config = Config()
+
+    click.secho(f"Input variables for {str(src)}:", bold=True, underline=True)
+
+    for _id, _input in config.inputs.items():
+        click.secho(f"\t{_id}", nl=False, bold=True)
+        if _input.required:
+            click.secho(" (required)", fg="bright_magenta", nl=False)
+        else:
+            click.secho(" (optional)", fg="bright_green", nl=False)
+        click.secho(f" {_input.model}", fg="cyan", nl=False)
+        click.secho(":", bold=True)
+        if not isinstance(_input.value, MissingInput):
+            click.echo("\t  default: ", nl=False)
+            click.echo(_input.value)
+        if _input.description is not None:
+            for _line in _input.description.splitlines():
+                click.secho(f"\t  {_line}", dim=True)
+        click.echo()
