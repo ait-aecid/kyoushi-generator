@@ -122,7 +122,7 @@ class TIMSource(ClickPath):
     __git_regex: re.Pattern = re.compile(r"(https?|ssh|git)(.+)")
     __git_replace: re.Pattern = re.compile(r"^git\+(.*)$")
 
-    def convert(self, value: str, param: str, ctx: Context):
+    def convert(self, value: str, param: str, ctx: Context) -> Union[str, Path]:
         """Check if the TIM source is a local path or remote URL.
 
         Args:
