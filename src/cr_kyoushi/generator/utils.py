@@ -15,6 +15,7 @@ from typing import (
     Union,
 )
 
+from click import Context
 from click import Path as ClickPath
 from git import Repo
 from git.exc import InvalidGitRepositoryError
@@ -121,7 +122,18 @@ class TIMSource(ClickPath):
     __git_regex: re.Pattern = re.compile(r"(https?|ssh|git)(.+)")
     __git_replace: re.Pattern = re.compile(r"^git\+(.*)$")
 
-    def convert(self, value: str, param, ctx):
+    def convert(self, value: str, param: str, ctx: Context):
+        """Check if the TIM source is a local path or remote URL.
+
+        Args:
+            value: The str tim source
+            param: The param name
+            ctx: The click cli context
+
+        Returns:
+            The path parameter as pathlib.Path or a str
+            if the path is a URL.
+        """
         if self.__git_regex.match(value):
             return self.__git_replace.sub(r"\1", value)
 
