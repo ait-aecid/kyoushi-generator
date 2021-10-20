@@ -4,5 +4,5 @@
     :module: cr_kyoushi.generator.cli
     :command: cli
     :prog_name: cr-kyoushi-generator
-    :depth: 0
+    :depth: 1
 {% endraw %}
