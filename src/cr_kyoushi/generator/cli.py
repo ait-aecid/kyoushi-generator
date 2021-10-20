@@ -1,3 +1,7 @@
+"""
+The CLI module
+"""
+
 import re
 import shutil
 
