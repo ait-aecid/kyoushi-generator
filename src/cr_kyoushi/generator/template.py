@@ -101,12 +101,14 @@ def _normalize_propabilities(
     raise Exception(f"Propabilities sum to 0, but got {propabilities}")
 
 
-def normalize_propabilities(propabilities, ignore=["extra"]):
+def normalize_propabilities(
+    propabilities: Union[Dict[str, float], List[float]], ignore: List[str] = ["extra"]
+) -> Union[Dict[str, float], List[float]]:
     """Accepts probability distribution dicts and lists and normalizes them.
 
     Args:
-        propabilities (Union[Dict, List]): A probability distribution as dict or list
-        ignore (List[str], optional): Additional dict keys to ignore during normalization.
+        propabilities: A probability distribution as dict or list
+        ignore: Additional dict keys to ignore during normalization.
 
     Raises:
         Exception: If the given distribution has an invalid container type, sums to 0
@@ -149,13 +151,17 @@ def normalize_propabilities(propabilities, ignore=["extra"]):
     )
 
 
-def normalize_probabilities_map(container, ignore=["extra"], skip=[]):
+def normalize_probabilities_map(
+    container: Dict[str, Union[Dict[str, float], List[float]]],
+    ignore: List[str] = ["extra"],
+    skip: List[str] = [],
+) -> Dict[str, Union[Dict[str, float], List[float]]]:
     """Normalizes a dictionary of distributions.
 
     Args:
-        container (Dict[Union[Dict, List]]): Dictionary containing multiple distributions
-        ignore (List[str], optional): Distribution dictionary keys to ignore during normalization
-        skip (List[str], optional): Dictionary keys to ignore (i.e., incase the given dict contains keys
+        container: Dictionary containing multiple distributions
+        ignore: Distribution dictionary keys to ignore during normalization
+        skip: Dictionary keys to ignore (i.e., incase the given dict contains keys
                                     which are not distributions.)
 
     Raises:
@@ -175,14 +181,15 @@ def normalize_probabilities_map(container, ignore=["extra"], skip=[]):
     raise Exception(f"Normalize map target must be a dictionary, but got '{container}'")
 
 
-def alpha(string):
+def alpha(string: str) -> str:
     """Returns a string only containing letters.
 
     Args:
         string: String containing all kinds of characters.
 
     Returns:
-        The string without any non-alpha characters."""
+        The string without any non-alpha characters.
+    """
     return "".join(
         [
             x
@@ -192,19 +199,28 @@ def alpha(string):
     )
 
 
-def get_max_hosts(mask):
+def get_max_hosts(mask: int) -> int:
     """Returns the number of maximum hosts to use.
 
     Args:
         mask: network mask.
 
     Returns:
-        An integer representing the maximum amount of hosts."""
+        An integer representing the maximum amount of hosts.
+    """
     host_bits = 32 - mask
     return 2 ** host_bits - 2
 
 
 def _add_env_options(env: NativeEnvironment):
+    """Configure Jinja2 environment options.
+
+    This private function is used to set a few general
+    Jinja2 environment options e.g., filters and policy settings.
+
+    Args:
+        env: The environment to configure
+    """
     # use pydantic encoder as default for dumps to add support for more types
     env.policies["json.dumps_kwargs"] = {"sort_keys": True, "default": pydantic_encoder}
     env.filters["normalize_distributions"] = normalize_probabilities_map
@@ -238,6 +254,13 @@ def _env_add_generators(
     seed_store: SeedStore,
     generators: List[Generator],
 ):
+    """Add the random data generator objects to the Jinja2 environment.
+
+    Args:
+        env: The Jinja2 environment to configure
+        seed_store: The seed store to use for seed generation
+        generators: The generators to add
+    """
     for gen in generators:
         gen_instance = gen.create(seed_store)
         env.globals.update({gen.name: gen_instance})
