@@ -58,10 +58,26 @@ class JinjaConfig(BaseModel):
 
 
 class MissingInput(BaseModel):
-    pass
+    """Canary class used to check if no input was passed.
+
+    Objects of this class type are used as default values
+    for the Input module. This makes it possible to check
+    if an input value has been passed or not by using isinstance.
+    We do this so we can also support passing in `None` values as
+    input.
+    """
 
 
 class Input(BaseModel):
+    """Model used for configuring CLI inputs.
+
+    CLI inputs are configured as part ot the TIM
+    configuration and must at least define a value
+    model (i.e., Python type hint string for defining input type).
+    Additionally it is also possible define a input value description
+    and default value, as well make the input required.
+    """
+
     model: str = Field(
         ..., description="The python type hint to use for loading this input"
     )
@@ -80,11 +96,15 @@ class Input(BaseModel):
 
 
 class InputName(StrictStr):
+    """Restricted string defining regex used to validate CLI input names."""
+
     regex = re.compile(r"^[\w\d-]*$")
 
 
 InputVarsDict = Dict[InputName, str]
+"""Type alias for dicts containing raw string encoded input variables"""
 InputDict = Dict[InputName, Input]
+"""Type alias for dicts containing parsed input variables"""
 
 
 class Config(BaseModel):

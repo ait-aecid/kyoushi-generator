@@ -1,3 +1,7 @@
+"""
+The CLI module
+"""
+
 import re
 import shutil
 
@@ -8,6 +12,7 @@ from typing import (
     Dict,
     List,
     Optional,
+    Sequence,
     Tuple,
     Union,
 )
@@ -66,11 +71,39 @@ pass_info = click.make_pass_decorator(Info, ensure=True)
 class CliPath(click.Path):
     """A Click path argument that returns a pathlib Path, not a string"""
 
-    def convert(self, value, param, ctx):
+    def convert(self, value: str, param: str, ctx: click.Context):
+        """Convert str path into pathlib.Path
+
+        Args:
+            value: The string path
+            param: The CLI parameter
+            ctx: The click context
+
+        Returns:
+            The parameter converted to a pathlib.Path
+        """
         return Path(super().convert(value, param, ctx))
 
 
-def validate_var(ctx: click.Context, param: str, value: str):
+def validate_var(
+    ctx: click.Context, param: str, value: Sequence[str]
+) -> Dict[str, str]:
+    """Validate and convert CLI input vars.
+
+    Convert CLI input vars of the form
+    `<name>=<value>` into a dict `<name> => <value>`.
+
+    Args:
+        ctx: The click context
+        param: The click parameter
+        value: Sequence of CLI input variables
+
+    Raises:
+        click.BadParameter: If one or more input vars have an invalid name
+
+    Returns:
+        Input variable dict
+    """
     input_vars: Dict[str, str] = {}
     errors: List[str] = []
     for var in value:
@@ -86,7 +119,22 @@ def validate_var(ctx: click.Context, param: str, value: str):
     return input_vars
 
 
-def validate_var_file(ctx: click.Context, param: str, value: str):
+def validate_var_file(
+    ctx: click.Context, param: str, value: Sequence[str]
+) -> InputVarsDict:
+    """Converts CLI input var files into an input var dict.
+
+    This function loads all given input var files and combines
+    them in a single input var dict.
+
+    Args:
+        ctx: The click context
+        param: The click parameter
+        value: The CLI input var files
+
+    Returns:
+        The resulting input var dict.
+    """
     input_vars: InputVarsDict = {}
     for file_path in value:
         with open(file_path, "r") as var_file:
@@ -101,6 +149,21 @@ def validate_var_file(ctx: click.Context, param: str, value: str):
 def convert_input_vars(
     inputs_config: InputDict, input_vars: InputVarsDict
 ) -> Tuple[Dict[str, Any], List[str], List[str]]:
+    """Convert raw input var dicts to configured inputs.
+
+    This function uses the given inputs configuration
+    to convert raw inputs to the defined python types.
+    It will also return a list of missing required inputs
+    and given inputs which are not part of the configuration.
+
+    Args:
+        inputs_config: The inputs configuration
+        input_vars: Input var dict with raw CLI inputs
+
+    Returns:
+        Tuple of the form
+        (parsed inputs, missing required inputs, unused given inputs)
+    """
     inputs: Dict[str, Any] = {}
     missing_inputs: List[str] = []
 
@@ -140,6 +203,15 @@ def version():
 
 
 def setup_repository(src: Union[Path, str], dest: Path) -> Repo:
+    """Copies a TIM repository to prepare for the creation of a TSM.
+
+    Args:
+        src: The TIM source (can be local path or GIT url)
+        dest: The local path to create the TSM in
+
+    Returns:
+        The GIT repo object for the created TSM path
+    """
     repo: Optional[Repo]
 
     # check if source is git repo or local path and copy it to TSM destination
@@ -166,6 +238,21 @@ def setup_tsm(
     context_file: Path,
     object_config_file: Path,
 ) -> Tuple[Dict[str, Any], List[Union[File, Directory]]]:
+    """Convert TIM into a TSM by rendering all TIM templates.
+
+    Args:
+        seed: The initial TSM seed to use
+        jinja_config: The TIM jinja2 configuration
+        inputs: The CLI input variables
+        dest: The TSM directory
+        generators: The available random generators
+        context_file: The TIM context template file path
+        object_config_file: The TIM template object file path
+
+    Returns:
+        The rendered TSM context and template object config as tuple.
+        (context, object config)
+    """
     seed_store = SeedStore(seed)
     # env used for rendering the context variables
     context_env = create_context_environment(
@@ -222,6 +309,14 @@ def write_tsm_configs(
     context: Dict[str, Any],
     object_config: List[Union[File, Directory]],
 ):
+    """Write the rendered TSM config files.
+
+    Args:
+        model_dir: The model directory path
+        config: The TSM config (contains the used seed and CLI inputs)
+        context: The rendered TSM context
+        object_config: The rendered template object config
+    """
     write_config(config.dict(), model_dir.joinpath("config.yml"))
     write_config(context, model_dir.joinpath("context.yml"))
     write_config(object_config, model_dir.joinpath("templates.yml"))
