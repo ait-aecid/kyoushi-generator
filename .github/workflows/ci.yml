@@ -44,3 +44,17 @@ jobs:
       - name: Run Unit-Tests with python3.8
         run: make test-junit
 
+      - name: Create Docs
+        run: make docs
+
+      - run: mv site public
+
+      - name: Deploy to GitHub Pages
+        if: success()
+        uses: crazy-max/ghaction-github-pages@v2
+        with:
+          target_branch: gh-pages
+          build_dir: public
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
