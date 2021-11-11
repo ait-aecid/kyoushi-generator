@@ -293,12 +293,12 @@ def setup_tsm(
     # remove template files
     while delete_files:
         f = dest.joinpath(delete_files.pop())
-        dest.joinpath(f).unlink()
+        f.unlink()
 
     # remove template directories
     while delete_dirs:
         d = dest.joinpath(delete_dirs.pop())
-        shutil.rmtree(dest.joinpath(d))
+        shutil.rmtree(d)
 
     return (context, object_config)
 
