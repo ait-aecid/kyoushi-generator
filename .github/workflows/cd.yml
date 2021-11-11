@@ -36,5 +36,5 @@ jobs:
       - name: Configure Poetry
         run: poetry config pypi-token.pypi ${{ secrets.PYPITOKEN }}
 
-#      - name: Publish Package
-#        run: poetry publish 
+      - name: Publish Package
+        run: poetry publish 
