@@ -261,9 +261,13 @@ def _env_add_generators(
         seed_store: The seed store to use for seed generation
         generators: The generators to add
     """
+    generator_dict = {}
+
     for gen in generators:
         gen_instance = gen.create(seed_store)
-        env.globals.update({gen.name: gen_instance})
+        generator_dict.update({gen.name: gen_instance})
+
+    env.globals["gen"] = generator_dict
 
 
 def create_context_environment(
