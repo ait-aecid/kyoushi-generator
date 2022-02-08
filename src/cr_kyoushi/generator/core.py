@@ -6,7 +6,6 @@ This module contains all the core generator plugins shipped with the generator t
 from random import Random
 
 from faker import Faker
-from faker.config import AVAILABLE_LOCALES
 from numpy.random import Generator as NumpyRandomGenerator
 from numpy.random import default_rng as numpy_default_rng
 
