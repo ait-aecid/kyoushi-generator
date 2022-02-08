@@ -47,7 +47,7 @@ class FakerGenerator(Generator):
     """Generator exposing a faker object
 
     The created faker object is configured to support all
-    available locales, but will default to en_UK, en_US, de_DE, de_AT (in order).
+    available locales, but will default to en_UK, en_US (in order).
     A locale can be specified through the array access.
 
     Examples:
@@ -75,10 +75,7 @@ class FakerGenerator(Generator):
         Returns:
             Faker object with all locales available
         """
-        locales = ["en_UK", "en_US", "de_DE", "de_AT"]
-        locales.extend(AVAILABLE_LOCALES)
-        # removing fr_QC since its deprecated in favor of fr_CA
-        locales.remove("fr_QC")
+        locales = ["en_UK", "en_US"]
         faker = Faker(locale=locales)
         Faker.seed(seed_store.next())
         return faker

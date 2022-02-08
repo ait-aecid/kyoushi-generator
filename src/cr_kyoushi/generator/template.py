@@ -39,7 +39,7 @@ from .plugin import Generator
 from .random import SeedStore
 
 
-if sys.version_info >= (3, 8):
+if sys.version_info >= (3, 9):
     from typing import (
         Annotated,
         Literal,
