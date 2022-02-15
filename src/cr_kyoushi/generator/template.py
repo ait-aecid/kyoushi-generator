@@ -43,12 +43,14 @@ if sys.version_info >= (3, 9):
     from typing import (
         Annotated,
         Literal,
+        no_type_check,
     )
 else:
     # need to use backport for python < 3.8
     from typing_extensions import (
         Annotated,
         Literal,
+        no_type_check,
     )
 
 
@@ -209,7 +211,7 @@ def get_max_hosts(mask: int) -> int:
         An integer representing the maximum amount of hosts.
     """
     host_bits = 32 - mask
-    return 2 ** host_bits - 2
+    return 2**host_bits - 2
 
 
 def _add_env_options(env: NativeEnvironment):
@@ -266,6 +268,7 @@ def _env_add_generators(
     for gen in generators:
         gen_instance = gen.create(seed_store)
         generator_dict.update({gen.name: gen_instance})
+        env.globals.update({gen.name: gen_instance})
 
     env.globals["gen"] = generator_dict
 
@@ -453,6 +456,7 @@ def get_yaml() -> YAML:
     return yaml
 
 
+@no_type_check
 def validate_object_list(object_list) -> List[Union[File, Directory]]:
     """Utility function for validating template object model lists.
 
