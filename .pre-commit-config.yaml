@@ -12,16 +12,17 @@ repos:
     - id: autoflake
       args: ['--in-place', '--remove-all-unused-imports']
 
--   repo: https://gitlab.com/pycqa/flake8
-    rev: 3.9.2
-    hooks:
-    - id: flake8
+- repo: https://gitlab.com/pycqa/flake8
+  rev: 3.9.2
+  hooks:
+  - id: flake8
 
--   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v0.931
-    hooks:
-    -   id: mypy
-        additional_dependencies: [pydantic, ruamel.yaml, importlib-metadata]
+- repo: https://github.com/pre-commit/mirrors-mypy
+  rev: v0.931
+  hooks:
+  - id: mypy
+    additional_dependencies: [pydantic, ruamel.yaml, importlib-metadata]
+    args: ["--ignore-missing-imports", "--scripts-are-modules", "--no-warn-unused-ignores"]
 
 - repo: https://github.com/timothycrosley/isort
   rev: 5.10.1

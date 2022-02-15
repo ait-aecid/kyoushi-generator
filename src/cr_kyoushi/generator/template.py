@@ -43,14 +43,12 @@ if sys.version_info >= (3, 9):
     from typing import (
         Annotated,
         Literal,
-        no_type_check,
     )
 else:
     # need to use backport for python < 3.8
     from typing_extensions import (
         Annotated,
         Literal,
-        no_type_check,
     )
 
 
@@ -456,7 +454,6 @@ def get_yaml() -> YAML:
     return yaml
 
 
-@no_type_check
 def validate_object_list(object_list) -> List[Union[File, Directory]]:
     """Utility function for validating template object model lists.
 
@@ -468,7 +465,7 @@ def validate_object_list(object_list) -> List[Union[File, Directory]]:
         Python classes.
     """
     return parse_obj_as(
-        Annotated[List[Union[File, Directory]], Field(discriminator="type")],
+        Annotated[List[Union[File, Directory]], Field(discriminator="type")],  # type: ignore[arg-type]
         object_list,
     )
 

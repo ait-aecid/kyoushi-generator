@@ -81,7 +81,7 @@ check-isort:  ## Check if imports are correctly ordered using isort.
 	@poetry run isort -c $(PY_SRC)
 
 check-mypy: ## check mypi typing
-	@poetry run mypy $(PY_SRC)
+	@poetry run mypy --ignore-missing-imports --scripts-are-modules --no-warn-unused-ignores $(PY_SRC)
 
 check-pylint:  ## Check for code smells using pylint.
 	@poetry run pylint $(PY_SRC)

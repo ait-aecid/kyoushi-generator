@@ -24,7 +24,6 @@ if sys.version_info >= (3, 8):
     )
     from typing import (
         Protocol,
-        no_type_check,
         runtime_checkable,
     )
 else:
@@ -99,7 +98,6 @@ def _check_plugin_allowed(
     return None
 
 
-@no_type_check
 def get_generators(plugin_config: PluginConfig) -> List[Generator]:
     """Utility function for getting a list of all available generator plugins.
 
@@ -110,7 +108,7 @@ def get_generators(plugin_config: PluginConfig) -> List[Generator]:
         List of the loaded generator plugins.
     """
     return [
-        ep.load()()
-        for ep in entry_points(group=GENERATOR_ENTRYPOINT)
-        if _check_plugin_allowed(ep, plugin_config)
+        ep.load()()  # type: ignore[attr-defined]
+        for ep in entry_points(group=GENERATOR_ENTRYPOINT)  # type: ignore[call-arg]
+        if _check_plugin_allowed(ep, plugin_config)  # type: ignore[arg-type]
     ]
