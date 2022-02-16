@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "cr-kyoushi-generator"
-version = "0.0.1"
+version = "0.0.2"
 description = ""
-authors = ["Maximilian Frank <maximilian.frank@ait.ac.at>"]
+authors = ["Maximilian Frank <maximilian.frank@ait.ac.at>", "Benjamin Akhras <benjamin.akhras@ait.ac.at>"]
 license = "GPL-3.0"
 readme = 'README.md'  # Markdown files are supported
 repository = "https://github.com/ait-aecid/kyoushi-generator"

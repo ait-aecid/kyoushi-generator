@@ -3,7 +3,6 @@ Module for TIM templating logic and classes.
 """
 
 import shutil
-import sys
 
 from collections import deque
 from pathlib import Path
@@ -34,22 +33,18 @@ from pydantic import (
 from pydantic.json import pydantic_encoder
 from ruamel.yaml import YAML
 
+# from typing import (
+#     Annotated,
+#     Literal,
+# )
+from typing_extensions import (
+    Annotated,
+    Literal,
+)
+
 from .config import JinjaConfig
 from .plugin import Generator
 from .random import SeedStore
-
-
-if sys.version_info >= (3, 9):
-    from typing import (
-        Annotated,
-        Literal,
-    )
-else:
-    # need to use backport for python < 3.8
-    from typing_extensions import (
-        Annotated,
-        Literal,
-    )
 
 
 def _normalize_propabilities(
@@ -465,7 +460,7 @@ def validate_object_list(object_list) -> List[Union[File, Directory]]:
         Python classes.
     """
     return parse_obj_as(
-        Annotated[List[Union[File, Directory]], Field(discriminator="type")],  # type: ignore[arg-type]
+        Annotated[List[Union[File, Directory]], Field()],  # type: ignore[arg-type]
         object_list,
     )
 
