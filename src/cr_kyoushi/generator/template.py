@@ -3,7 +3,6 @@ Module for TIM templating logic and classes.
 """
 
 import shutil
-import sys
 
 from collections import deque
 from pathlib import Path
@@ -34,22 +33,18 @@ from pydantic import (
 from pydantic.json import pydantic_encoder
 from ruamel.yaml import YAML
 
+# from typing import (
+#     Annotated,
+#     Literal,
+# )
+from typing_extensions import (
+    Annotated,
+    Literal,
+)
+
 from .config import JinjaConfig
 from .plugin import Generator
 from .random import SeedStore
-
-
-if sys.version_info >= (3, 8):
-    from typing import (
-        Annotated,
-        Literal,
-    )
-else:
-    # need to use backport for python < 3.8
-    from typing_extensions import (
-        Annotated,
-        Literal,
-    )
 
 
 def _normalize_propabilities(
@@ -209,7 +204,7 @@ def get_max_hosts(mask: int) -> int:
         An integer representing the maximum amount of hosts.
     """
     host_bits = 32 - mask
-    return 2 ** host_bits - 2
+    return 2**host_bits - 2
 
 
 def _add_env_options(env: NativeEnvironment):
@@ -266,6 +261,7 @@ def _env_add_generators(
     for gen in generators:
         gen_instance = gen.create(seed_store)
         generator_dict.update({gen.name: gen_instance})
+        env.globals.update({gen.name: gen_instance})
 
     env.globals["gen"] = generator_dict
 
@@ -464,7 +460,7 @@ def validate_object_list(object_list) -> List[Union[File, Directory]]:
         Python classes.
     """
     return parse_obj_as(
-        Annotated[List[Union[File, Directory]], Field(discriminator="type")],
+        Annotated[List[Union[File, Directory]], Field()],  # type: ignore[arg-type]
         object_list,
     )
 

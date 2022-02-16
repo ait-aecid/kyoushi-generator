@@ -3,39 +3,24 @@ The plugin module contains the interface definitions and utility functions used
 to load generator plugins used in the TIM context templating configuration.
 """
 
-import sys
 
 from typing import (
     Any,
     List,
     Optional,
+    Protocol,
     Type,
+    runtime_checkable,
+)
+
+from importlib_metadata import (
+    EntryPoint,
+    entry_points,
 )
 
 from . import GENERATOR_ENTRYPOINT
 from .config import PluginConfig
 from .random import SeedStore
-
-
-if sys.version_info >= (3, 8):
-    from importlib.metadata import (
-        EntryPoint,
-        entry_points,
-    )
-    from typing import (
-        Protocol,
-        runtime_checkable,
-    )
-else:
-    # need to use backport for python < 3.8
-    from importlib_metadata import (
-        EntryPoint,
-        entry_points,
-    )
-    from typing_extensions import (
-        Protocol,
-        runtime_checkable,
-    )
 
 
 @runtime_checkable
@@ -84,11 +69,9 @@ def _check_plugin_allowed(
     """
     if (
         # entry point name must be in an include pattern
-        any(
-            [pattern.match(ep.name) for pattern in plugin_config.include_names]  # type: ignore
-        )
+        any([pattern.match(ep.name) for pattern in plugin_config.include_names])  # type: ignore[attr-defined]
         # and not be excluded
-        and not any([pattern.match(ep.name) for pattern in plugin_config.exclude_names])  # type: ignore
+        and not any([pattern.match(ep.name) for pattern in plugin_config.exclude_names])  # type: ignore[attr-defined]
     ):
         class_ = ep.load()
         if (
@@ -110,7 +93,7 @@ def get_generators(plugin_config: PluginConfig) -> List[Generator]:
         List of the loaded generator plugins.
     """
     return [
-        ep.load()()
-        for ep in entry_points(group=GENERATOR_ENTRYPOINT)
-        if _check_plugin_allowed(ep, plugin_config)
+        ep.load()()  # type: ignore[attr-defined]
+        for ep in entry_points(group=GENERATOR_ENTRYPOINT)  # type: ignore[call-arg]
+        if _check_plugin_allowed(ep, plugin_config)  # type: ignore[arg-type]
     ]
