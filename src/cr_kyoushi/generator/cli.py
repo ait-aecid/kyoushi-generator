@@ -71,7 +71,7 @@ pass_info = click.make_pass_decorator(Info, ensure=True)
 class CliPath(click.Path):
     """A Click path argument that returns a pathlib Path, not a string"""
 
-    def convert(self, value: str, param: str, ctx: click.Context):
+    def convert(self, value: str, param: str, ctx: click.Context) -> Path:  # type: ignore[override]
         """Convert str path into pathlib.Path
 
         Args:
@@ -82,7 +82,7 @@ class CliPath(click.Path):
         Returns:
             The parameter converted to a pathlib.Path
         """
-        return Path(super().convert(value, param, ctx))
+        return Path(super().convert(value, param, ctx))  # type: ignore[arg-type]
 
 
 def validate_var(

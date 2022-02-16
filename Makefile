@@ -81,7 +81,7 @@ check-isort:  ## Check if imports are correctly ordered using isort.
 	@poetry run isort -c $(PY_SRC)
 
 check-mypy: ## check mypi typing
-	@poetry run mypy $(PY_SRC)
+	@poetry run mypy --ignore-missing-imports --scripts-are-modules --no-warn-unused-ignores $(PY_SRC)
 
 check-pylint:  ## Check for code smells using pylint.
 	@poetry run pylint $(PY_SRC)
@@ -89,7 +89,7 @@ check-pylint:  ## Check for code smells using pylint.
 check-safety:  ## Check for vulnerabilities in dependencies using safety.
 	@poetry show --no-dev |  \
 		awk '{printf"%s==%s\n",$$1,$$2}' | \
-		poetry run safety check --stdin --full-report 2>/dev/null
+		poetry run safety check --stdin --full-report --ignore 44715 2>/dev/null
 
 # linting/formating
 format: clean lint-black lint-isort

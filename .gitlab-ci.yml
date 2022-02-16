@@ -26,7 +26,7 @@ stages:
 
 .quality-template: &quality
   <<: *install-deps
-  image: python:3.7
+  image: python:3.8
   stage: quality
 
 .test-template: &test
@@ -69,18 +69,18 @@ check-safety:
 
 # Tests jobs ------------------------
 
-python3.7:
-  <<: *test
-  image: python:3.7
-
 python3.8:
   <<: *test
   image: python:3.8
 
+python3.10:
+  <<: *test
+  image: python:3.10
+
 # Publish jobs ----------------------
 
 gitlab-package:
-  image: python:3.7
+  image: python:3.8
   stage: publish
   before_script:
   - pip install poetry
@@ -98,7 +98,7 @@ gitlab-package:
 
 pages:
   <<: *install-deps
-  image: python:3.7
+  image: python:3.8
   stage: publish
   script:
     - make docs
