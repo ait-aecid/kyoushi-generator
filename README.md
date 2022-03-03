@@ -8,6 +8,8 @@ cr-kyoushi-generator apply --seed 42 \
         ~/Projects/kyoushi-testbed-tsm
 ```
 
+Check out the [documentation](https://ait-aecid.github.io/kyoushi-generator/) of this tool for more information.
+
 ## Template Independent Model (TIM) Format
 
 A TIM is defined by two things:
