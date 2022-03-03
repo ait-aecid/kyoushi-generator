@@ -1,0 +1,2121 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Cyber Range testbed generator for creating randomized instances of testbed models.">
+      
+      
+      
+      
+        <link rel="canonical" href="https://ait-aecid.github.io/kyoushi-dataset/reference/template/">
+      
+      <link rel="shortcut icon" href="../../images/favicon.ico">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-6.2.8">
+    
+    
+      
+        <title>Template - Cyber Range Kyoushi Generator</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.cb6bc1d0.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.39b8e14a.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../../stylesheets/jquery.fancybox.min.css">
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="ait" data-md-color-primary="" data-md-color-accent="">
+      
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cr_kyoushi.generator.template.BaseFileObject" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="https://ait-aecid.github.io/kyoushi-dataset/" title="Cyber Range Kyoushi Generator" class="md-header-nav__button md-logo" aria-label="Cyber Range Kyoushi Generator">
+      
+  <img src="../../images/cr_icon.svg" alt="logo">
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      <div class="md-header-nav__ellipsis">
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
+            Cyber Range Kyoushi Generator
+          </span>
+        </div>
+        <div class="md-header-nav__topic">
+          <span class="md-ellipsis">
+            
+              Template
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/ait-aecid/kyoushi-generator/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    kyoushi-generator
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://ait-aecid.github.io/kyoushi-dataset/" title="Cyber Range Kyoushi Generator" class="md-nav__button md-logo" aria-label="Cyber Range Kyoushi Generator">
+      
+  <img src="../../images/cr_icon.svg" alt="logo">
+
+    </a>
+    Cyber Range Kyoushi Generator
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/ait-aecid/kyoushi-generator/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    kyoushi-generator
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Overview
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/" class="md-nav__link">
+        Contributing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../license/" class="md-nav__link">
+        License
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cli/" class="md-nav__link">
+        CLI
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5" checked>
+      
+      <label class="md-nav__link" for="nav-5">
+        API
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+      <nav class="md-nav" aria-label="API" data-md-level="1">
+        <label class="md-nav__title" for="nav-5">
+          <span class="md-nav__icon md-icon"></span>
+          API
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../generators/" class="md-nav__link">
+        Generators
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../config/" class="md-nav__link">
+        Config
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plugin/" class="md-nav__link">
+        Plugin
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../random/" class="md-nav__link">
+        Random
+      </a>
+    </li>
+  
+
+          
+            
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Template
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Template
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.BaseFileObject" class="md-nav__link">
+    BaseFileObject
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.BaseObject" class="md-nav__link">
+    BaseObject
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.Directory" class="md-nav__link">
+    Directory
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.File" class="md-nav__link">
+    File
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.alpha" class="md-nav__link">
+    alpha()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.create_context_environment" class="md-nav__link">
+    create_context_environment()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.create_environment" class="md-nav__link">
+    create_environment()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.create_template_object_environment" class="md-nav__link">
+    create_template_object_environment()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.get_max_hosts" class="md-nav__link">
+    get_max_hosts()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.get_yaml" class="md-nav__link">
+    get_yaml()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.normalize_probabilities_map" class="md-nav__link">
+    normalize_probabilities_map()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.normalize_propabilities" class="md-nav__link">
+    normalize_propabilities()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.render_template" class="md-nav__link">
+    render_template()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.render_tim" class="md-nav__link">
+    render_tim()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.validate_object_list" class="md-nav__link">
+    validate_object_list()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.write_template" class="md-nav__link">
+    write_template()
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+          
+            
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../utils/" class="md-nav__link">
+        Utils
+      </a>
+    </li>
+  
+
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.BaseFileObject" class="md-nav__link">
+    BaseFileObject
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.BaseObject" class="md-nav__link">
+    BaseObject
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.Directory" class="md-nav__link">
+    Directory
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.File" class="md-nav__link">
+    File
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.alpha" class="md-nav__link">
+    alpha()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.create_context_environment" class="md-nav__link">
+    create_context_environment()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.create_environment" class="md-nav__link">
+    create_environment()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.create_template_object_environment" class="md-nav__link">
+    create_template_object_environment()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.get_max_hosts" class="md-nav__link">
+    get_max_hosts()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.get_yaml" class="md-nav__link">
+    get_yaml()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.normalize_probabilities_map" class="md-nav__link">
+    normalize_probabilities_map()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.normalize_propabilities" class="md-nav__link">
+    normalize_propabilities()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.render_template" class="md-nav__link">
+    render_template()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.render_tim" class="md-nav__link">
+    render_tim()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.validate_object_list" class="md-nav__link">
+    validate_object_list()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cr_kyoushi.generator.template.write_template" class="md-nav__link">
+    write_template()
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/ait-aecid/kyoushi-generator/edit/main/docs/reference/template.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  <h1>Template</h1>
+                
+                <div class="doc doc-object doc-module">
+<div class="doc doc-contents first">
+<p>Module for TIM templating logic and classes.</p>
+<div class="doc doc-children">
+<div class="doc doc-object doc-class">
+<h3 class="doc doc-heading" id="cr_kyoushi.generator.template.BaseFileObject">
+
+        <code>BaseFileObject</code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-pydantic-model"><code>pydantic-model</code></small>
+  </span>
+
+      <a class="headerlink" href="#cr_kyoushi.generator.template.BaseFileObject" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Base model for file/directory type template objects</p>
+<div class="doc doc-children">
+<div class="doc doc-object doc-attribute">
+<h4 class="doc doc-heading" id="cr_kyoushi.generator.template.BaseFileObject.delete">
+
+        <code class="highlight">
+delete: <span class="nb">bool</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-pydantic-field"><code>pydantic-field</code></small>
+  </span>
+
+      <a class="headerlink" href="#cr_kyoushi.generator.template.BaseFileObject.delete" title="Permanent link">&para;</a></h4>
+<div class="doc doc-contents ">
+<p>If the template object should be deleted after instantiating the TSM</p>
+</div>
+</div>
+<div class="doc doc-object doc-attribute">
+<h4 class="doc doc-heading" id="cr_kyoushi.generator.template.BaseFileObject.dest">
+
+        <code class="highlight">
+dest: <span class="nb">str</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-pydantic-field"><code>pydantic-field</code></small>
+      <small class="doc doc-property doc-property-required"><code>required</code></small>
+  </span>
+
+      <a class="headerlink" href="#cr_kyoushi.generator.template.BaseFileObject.dest" title="Permanent link">&para;</a></h4>
+<div class="doc doc-contents ">
+<p>The templates destination path (relative to the containing directories destination path)</p>
+</div>
+</div>
+<div class="doc doc-object doc-attribute">
+<h4 class="doc doc-heading" id="cr_kyoushi.generator.template.BaseFileObject.src">
+
+        <code class="highlight">
+src: <span class="nb">str</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-pydantic-field"><code>pydantic-field</code></small>
+      <small class="doc doc-property doc-property-required"><code>required</code></small>
+  </span>
+
+      <a class="headerlink" href="#cr_kyoushi.generator.template.BaseFileObject.src" title="Permanent link">&para;</a></h4>
+<div class="doc doc-contents ">
+<p>The template source path (relative to the containing directory)</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="doc doc-object doc-class">
+<h3 class="doc doc-heading" id="cr_kyoushi.generator.template.BaseObject">
+
+        <code>BaseObject</code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-pydantic-model"><code>pydantic-model</code></small>
+  </span>
+
+      <a class="headerlink" href="#cr_kyoushi.generator.template.BaseObject" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Base model for template configuration models</p>
+<div class="doc doc-children">
+<div class="doc doc-object doc-attribute">
+<h4 class="doc doc-heading" id="cr_kyoushi.generator.template.BaseObject.extra">
+
+        <code class="highlight">
+extra: <span class="n">Any</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-pydantic-field"><code>pydantic-field</code></small>
+  </span>
+
+      <a class="headerlink" href="#cr_kyoushi.generator.template.BaseObject.extra" title="Permanent link">&para;</a></h4>
+<div class="doc doc-contents ">
+<p>Dict that can be used to bind additional context info to a template object</p>
+</div>
+</div>
+<div class="doc doc-object doc-attribute">
+<h4 class="doc doc-heading" id="cr_kyoushi.generator.template.BaseObject.name">
+
+        <code class="highlight">
+name: <span class="nb">str</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-pydantic-field"><code>pydantic-field</code></small>
+      <small class="doc doc-property doc-property-required"><code>required</code></small>
+  </span>
+
+      <a class="headerlink" href="#cr_kyoushi.generator.template.BaseObject.name" title="Permanent link">&para;</a></h4>
+<div class="doc doc-contents ">
+<p>A descriptive name for the file template directive</p>
+</div>
+</div>
+<div class="doc doc-object doc-method">
+<h4 class="doc doc-heading" id="cr_kyoushi.generator.template.BaseObject.dict">
+
+        <code class="highlight language-python">
+dict<span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>        </code>
+
+
+      <a class="headerlink" href="#cr_kyoushi.generator.template.BaseObject.dict" title="Permanent link">&para;</a></h4>
+<div class="doc doc-contents ">
+<p>Generate a dictionary representation of the model, optionally specifying which fields to include or exclude.</p>
+<details class="quote">
+<summary>Source code in <code>generator/template.py</code></summary>
+<div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="c1"># set by alias to true by default</span>
+    <span class="c1"># to ensure that template object fields are always serialized based</span>
+    <span class="c1"># on their alias names</span>
+    <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">"by_alias"</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">dict</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="doc doc-object doc-class">
+<h3 class="doc doc-heading" id="cr_kyoushi.generator.template.Directory">
+
+        <code>Directory</code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-pydantic-model"><code>pydantic-model</code></small>
+  </span>
+
+      <a class="headerlink" href="#cr_kyoushi.generator.template.Directory" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Directory template model for configuring TIM template directories</p>
+<div class="doc doc-children">
+<div class="doc doc-object doc-attribute">
+<h4 class="doc doc-heading" id="cr_kyoushi.generator.template.Directory.contents">
+
+        <code class="highlight">
+contents: <span class="n">Union</span><span class="p">[</span><span class="n">cr_kyoushi</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">template</span><span class="o">.</span><span class="n">File</span><span class="p">,</span> <span class="n">Directory</span><span class="p">]</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-pydantic-field"><code>pydantic-field</code></small>
+  </span>
+
+      <a class="headerlink" href="#cr_kyoushi.generator.template.Directory.contents" title="Permanent link">&para;</a></h4>
+<div class="doc doc-contents ">
+<p>List of sub directories or files</p>
+</div>
+</div>
+<div class="doc doc-object doc-attribute">
+<h4 class="doc doc-heading" id="cr_kyoushi.generator.template.Directory.copy_">
+
+        <code class="highlight">
+copy_: <span class="nb">str</span>        </code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-pydantic-field"><code>pydantic-field</code></small>
+  </span>
+
+      <a class="headerlink" href="#cr_kyoushi.generator.template.Directory.copy_" title="Permanent link">&para;</a></h4>
+<div class="doc doc-contents ">
+<p>List of file globs (relative to the dir) to copy as is</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="doc doc-object doc-class">
+<h3 class="doc doc-heading" id="cr_kyoushi.generator.template.File">
+
+        <code>File</code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-pydantic-model"><code>pydantic-model</code></small>
+  </span>
+
+      <a class="headerlink" href="#cr_kyoushi.generator.template.File" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>File template model for configuring TIM template files</p>
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+</div>
+</div>
+<div class="doc doc-object doc-function">
+<h3 class="doc doc-heading" id="cr_kyoushi.generator.template.alpha">
+
+        <code class="highlight language-python">
+alpha<span class="p">(</span><span class="n">string</span><span class="p">)</span>        </code>
+
+
+      <a class="headerlink" href="#cr_kyoushi.generator.template.alpha" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Returns a string only containing letters.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>string</code></td>
+<td><code>str</code></td>
+<td>
+<p>String containing all kinds of characters.</p>
+</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>str</code></td>
+<td>
+<p>The string without any non-alpha characters.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Source code in <code>generator/template.py</code></summary>
+<div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">alpha</span><span class="p">(</span><span class="n">string</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">"""Returns a string only containing letters.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        string: String containing all kinds of characters.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The string without any non-alpha characters.</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="n">x</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">string</span>
+            <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="s2">"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-function">
+<h3 class="doc doc-heading" id="cr_kyoushi.generator.template.create_context_environment">
+
+        <code class="highlight language-python">
+create_context_environment<span class="p">(</span><span class="n">seed_store</span><span class="p">,</span> <span class="n">generators</span><span class="o">=</span><span class="p">[],</span> <span class="n">template_dirs</span><span class="o">=</span><span class="n">PosixPath</span><span class="p">(</span><span class="s1">'.'</span><span class="p">))</span>        </code>
+
+
+      <a class="headerlink" href="#cr_kyoushi.generator.template.create_context_environment" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Creates the Jinja2 context for rendering the TIM context configuration.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>seed_store</code></td>
+<td><code>SeedStore</code></td>
+<td>
+<p>The seed store to use for generating PRNG seeds.</p>
+</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>generators</code></td>
+<td><code>List[cr_kyoushi.generator.plugin.Generator]</code></td>
+<td>
+<p>The random data generators to make available in the Jinja2 context</p>
+</td>
+<td><code>[]</code></td>
+</tr>
+<tr>
+<td><code>template_dirs</code></td>
+<td><code>Union[str, pathlib.Path, List[Union[str, pathlib.Path]]]</code></td>
+<td>
+<p>The Jinja2 template directory.</p>
+</td>
+<td><code>PosixPath('.')</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NativeEnvironment</code></td>
+<td>
+<p>Jinja2 NativeEnvironment for rendering the TIM context.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Source code in <code>generator/template.py</code></summary>
+<div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">create_context_environment</span><span class="p">(</span>
+    <span class="n">seed_store</span><span class="p">:</span> <span class="n">SeedStore</span><span class="p">,</span>
+    <span class="n">generators</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Generator</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+    <span class="n">template_dirs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Text</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Text</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]]</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"./"</span><span class="p">),</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NativeEnvironment</span><span class="p">:</span>
+    <span class="sd">"""Creates the Jinja2 context for rendering the TIM context configuration.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        seed_store: The seed store to use for generating PRNG seeds.</span>
+<span class="sd">        generators: The random data generators to make available in the Jinja2 context</span>
+<span class="sd">        template_dirs: The Jinja2 template directory.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Jinja2 NativeEnvironment for rendering the TIM context.</span>
+<span class="sd">    """</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">create_template_object_environment</span><span class="p">(</span><span class="n">template_dirs</span><span class="p">)</span>
+    <span class="n">_env_add_generators</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">seed_store</span><span class="p">,</span> <span class="n">generators</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">env</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-function">
+<h3 class="doc doc-heading" id="cr_kyoushi.generator.template.create_environment">
+
+        <code class="highlight language-python">
+create_environment<span class="p">(</span><span class="n">seed_store</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">template_dirs</span><span class="o">=</span><span class="n">PosixPath</span><span class="p">(</span><span class="s1">'.'</span><span class="p">),</span> <span class="n">generators</span><span class="o">=</span><span class="p">[])</span>        </code>
+
+
+      <a class="headerlink" href="#cr_kyoushi.generator.template.create_environment" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Creates the Jinja2 context for rendering the TIM templates.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>config</code></td>
+<td><code>JinjaConfig</code></td>
+<td>
+<p>The Jinja2 configuration.</p>
+</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>template_dirs</code></td>
+<td><code>Union[str, pathlib.Path, List[Union[str, pathlib.Path]]]</code></td>
+<td>
+<p>The Jinja2 template directory.</p>
+</td>
+<td><code>PosixPath('.')</code></td>
+</tr>
+<tr>
+<td><code>generators</code></td>
+<td><code>List[cr_kyoushi.generator.plugin.Generator]</code></td>
+<td>
+<p>The random data generators to make available in the Jinja2 context</p>
+</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NativeEnvironment</code></td>
+<td>
+<p>Jinja2 NativeEnvironment for rendering the TIM.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Source code in <code>generator/template.py</code></summary>
+<div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">create_environment</span><span class="p">(</span>
+    <span class="n">seed_store</span><span class="p">:</span> <span class="n">SeedStore</span><span class="p">,</span>
+    <span class="n">config</span><span class="p">:</span> <span class="n">JinjaConfig</span><span class="p">,</span>
+    <span class="n">template_dirs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Text</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Text</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]]</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"./"</span><span class="p">),</span>
+    <span class="n">generators</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Generator</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NativeEnvironment</span><span class="p">:</span>
+    <span class="sd">"""Creates the Jinja2 context for rendering the TIM templates.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        config: The Jinja2 configuration.</span>
+<span class="sd">        template_dirs: The Jinja2 template directory.</span>
+<span class="sd">        generators: The random data generators to make available in the Jinja2 context</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Jinja2 NativeEnvironment for rendering the TIM.</span>
+<span class="sd">    """</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">NativeEnvironment</span><span class="p">(</span>
+        <span class="n">loader</span><span class="o">=</span><span class="n">FileSystemLoader</span><span class="p">(</span><span class="n">template_dirs</span><span class="p">),</span>
+        <span class="n">block_start_string</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">block_start</span><span class="p">,</span>
+        <span class="n">block_end_string</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">block_end</span><span class="p">,</span>
+        <span class="n">variable_start_string</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">variable_start</span><span class="p">,</span>
+        <span class="n">variable_end_string</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">variable_end</span><span class="p">,</span>
+        <span class="n">comment_start_string</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">comment_start</span><span class="p">,</span>
+        <span class="n">comment_end_string</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">comment_end</span><span class="p">,</span>
+        <span class="n">line_statement_prefix</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">line_statement</span><span class="p">,</span>
+        <span class="n">line_comment_prefix</span><span class="o">=</span><span class="n">config</span><span class="o">.</span><span class="n">line_comment</span><span class="p">,</span>
+        <span class="n">keep_trailing_newline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">undefined</span><span class="o">=</span><span class="n">StrictUndefined</span><span class="p">,</span>
+        <span class="n">extensions</span><span class="o">=</span><span class="p">[</span><span class="s2">"jinja2.ext.do"</span><span class="p">,</span> <span class="s2">"jinja2.ext.loopcontrols"</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="n">_add_env_options</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+    <span class="n">_env_add_generators</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">seed_store</span><span class="p">,</span> <span class="n">generators</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">env</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-function">
+<h3 class="doc doc-heading" id="cr_kyoushi.generator.template.create_template_object_environment">
+
+        <code class="highlight language-python">
+create_template_object_environment<span class="p">(</span><span class="n">template_dirs</span><span class="o">=</span><span class="n">PosixPath</span><span class="p">(</span><span class="s1">'.'</span><span class="p">))</span>        </code>
+
+
+      <a class="headerlink" href="#cr_kyoushi.generator.template.create_template_object_environment" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Creates the Jinja2 context for rendering the <code>templates.yml.j2</code> configuration.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>template_dirs</code></td>
+<td><code>Union[str, pathlib.Path, List[Union[str, pathlib.Path]]]</code></td>
+<td>
+<p>The Jinja2 template directory.</p>
+</td>
+<td><code>PosixPath('.')</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NativeEnvironment</code></td>
+<td>
+<p>Jinja2 NativeEnvironment for rendering the templates configuration.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Source code in <code>generator/template.py</code></summary>
+<div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">create_template_object_environment</span><span class="p">(</span>
+    <span class="n">template_dirs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Text</span><span class="p">,</span> <span class="n">Path</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Text</span><span class="p">,</span> <span class="n">Path</span><span class="p">]]]</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"./"</span><span class="p">)</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NativeEnvironment</span><span class="p">:</span>
+    <span class="sd">"""Creates the Jinja2 context for rendering the `templates.yml.j2` configuration.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        template_dirs: The Jinja2 template directory.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Jinja2 NativeEnvironment for rendering the templates configuration.</span>
+<span class="sd">    """</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">NativeEnvironment</span><span class="p">(</span>
+        <span class="n">loader</span><span class="o">=</span><span class="n">FileSystemLoader</span><span class="p">(</span><span class="n">template_dirs</span><span class="p">),</span>
+        <span class="n">undefined</span><span class="o">=</span><span class="n">StrictUndefined</span><span class="p">,</span>
+        <span class="n">extensions</span><span class="o">=</span><span class="p">[</span><span class="s2">"jinja2.ext.do"</span><span class="p">,</span> <span class="s2">"jinja2.ext.loopcontrols"</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="n">_add_env_options</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">env</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-function">
+<h3 class="doc doc-heading" id="cr_kyoushi.generator.template.get_max_hosts">
+
+        <code class="highlight language-python">
+get_max_hosts<span class="p">(</span><span class="n">mask</span><span class="p">)</span>        </code>
+
+
+      <a class="headerlink" href="#cr_kyoushi.generator.template.get_max_hosts" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Returns the number of maximum hosts to use.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mask</code></td>
+<td><code>int</code></td>
+<td>
+<p>network mask.</p>
+</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>int</code></td>
+<td>
+<p>An integer representing the maximum amount of hosts.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Source code in <code>generator/template.py</code></summary>
+<div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">get_max_hosts</span><span class="p">(</span><span class="n">mask</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="sd">"""Returns the number of maximum hosts to use.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        mask: network mask.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        An integer representing the maximum amount of hosts.</span>
+<span class="sd">    """</span>
+    <span class="n">host_bits</span> <span class="o">=</span> <span class="mi">32</span> <span class="o">-</span> <span class="n">mask</span>
+    <span class="k">return</span> <span class="mi">2</span><span class="o">**</span><span class="n">host_bits</span> <span class="o">-</span> <span class="mi">2</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-function">
+<h3 class="doc doc-heading" id="cr_kyoushi.generator.template.get_yaml">
+
+        <code class="highlight language-python">
+get_yaml<span class="p">()</span>        </code>
+
+
+      <a class="headerlink" href="#cr_kyoushi.generator.template.get_yaml" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Utility function for creating a YAML parser and serializer.</p>
+<p><strong>Returns:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>YAML</code></td>
+<td>
+<p>A ruamel.yaml.YAML object</p>
+</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Source code in <code>generator/template.py</code></summary>
+<div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">get_yaml</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">YAML</span><span class="p">:</span>
+    <span class="sd">"""Utility function for creating a YAML parser and serializer.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A ruamel.yaml.YAML object</span>
+<span class="sd">    """</span>
+    <span class="n">yaml</span> <span class="o">=</span> <span class="n">YAML</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s2">"safe"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="p">[</span><span class="n">File</span><span class="p">,</span> <span class="n">Directory</span><span class="p">]:</span>
+        <span class="n">yaml</span><span class="o">.</span><span class="n">register_class</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">yaml</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-function">
+<h3 class="doc doc-heading" id="cr_kyoushi.generator.template.normalize_probabilities_map">
+
+        <code class="highlight language-python">
+normalize_probabilities_map<span class="p">(</span><span class="n">container</span><span class="p">,</span> <span class="n">ignore</span><span class="o">=</span><span class="p">[</span><span class="s1">'extra'</span><span class="p">],</span> <span class="n">skip</span><span class="o">=</span><span class="p">[])</span>        </code>
+
+
+      <a class="headerlink" href="#cr_kyoushi.generator.template.normalize_probabilities_map" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Normalizes a dictionary of distributions.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>container</code></td>
+<td><code>Dict[str, Union[Dict[str, float], List[float]]]</code></td>
+<td>
+<p>Dictionary containing multiple distributions</p>
+</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>ignore</code></td>
+<td><code>List[str]</code></td>
+<td>
+<p>Distribution dictionary keys to ignore during normalization</p>
+</td>
+<td><code>['extra']</code></td>
+</tr>
+<tr>
+<td><code>skip</code></td>
+<td><code>List[str]</code></td>
+<td>
+<p>Dictionary keys to ignore (i.e., incase the given dict contains keys
+                        which are not distributions.)</p>
+</td>
+<td><code>[]</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exceptions:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Exception</code></td>
+<td>
+<p>If the given distributions have an invalid container type, sum to 0
+       or contain negative numbers.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Dict[str, Union[Dict[str, float], List[float]]]</code></td>
+<td>
+<p>The dictionary with all its distributions normalized.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Source code in <code>generator/template.py</code></summary>
+<div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">normalize_probabilities_map</span><span class="p">(</span>
+    <span class="n">container</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]],</span>
+    <span class="n">ignore</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"extra"</span><span class="p">],</span>
+    <span class="n">skip</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]]:</span>
+    <span class="sd">"""Normalizes a dictionary of distributions.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        container: Dictionary containing multiple distributions</span>
+<span class="sd">        ignore: Distribution dictionary keys to ignore during normalization</span>
+<span class="sd">        skip: Dictionary keys to ignore (i.e., incase the given dict contains keys</span>
+<span class="sd">                                    which are not distributions.)</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        Exception: If the given distributions have an invalid container type, sum to 0</span>
+<span class="sd">                   or contain negative numbers.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The dictionary with all its distributions normalized.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">container</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="c1"># normalize each distribution</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">container</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># but do nothing with those in the skip list</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">skip</span><span class="p">:</span>
+                <span class="n">container</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">normalize_propabilities</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">ignore</span><span class="o">=</span><span class="n">ignore</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">container</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Normalize map target must be a dictionary, but got '</span><span class="si">{</span><span class="n">container</span><span class="si">}</span><span class="s2">'"</span><span class="p">)</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-function">
+<h3 class="doc doc-heading" id="cr_kyoushi.generator.template.normalize_propabilities">
+
+        <code class="highlight language-python">
+normalize_propabilities<span class="p">(</span><span class="n">propabilities</span><span class="p">,</span> <span class="n">ignore</span><span class="o">=</span><span class="p">[</span><span class="s1">'extra'</span><span class="p">])</span>        </code>
+
+
+      <a class="headerlink" href="#cr_kyoushi.generator.template.normalize_propabilities" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Accepts probability distribution dicts and lists and normalizes them.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>propabilities</code></td>
+<td><code>Union[Dict[str, float], List[float]]</code></td>
+<td>
+<p>A probability distribution as dict or list</p>
+</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>ignore</code></td>
+<td><code>List[str]</code></td>
+<td>
+<p>Additional dict keys to ignore during normalization.</p>
+</td>
+<td><code>['extra']</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exceptions:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Exception</code></td>
+<td>
+<p>If the given distribution has an invalid container type, sums to 0
+       or contains negative numbers.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Union[Dict[str, float], List[float]]</code></td>
+<td>
+<p>The normalized distribution.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Source code in <code>generator/template.py</code></summary>
+<div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">normalize_propabilities</span><span class="p">(</span>
+    <span class="n">propabilities</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">ignore</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"extra"</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+    <span class="sd">"""Accepts probability distribution dicts and lists and normalizes them.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        propabilities: A probability distribution as dict or list</span>
+<span class="sd">        ignore: Additional dict keys to ignore during normalization.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        Exception: If the given distribution has an invalid container type, sums to 0</span>
+<span class="sd">                   or contains negative numbers.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The normalized distribution.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">propabilities</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># only consider non ignored fields as part of the distribution</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">propabilities</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ignore</span><span class="p">:</span>
+                <span class="n">keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+                <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+        <span class="c1"># normalize the probabilities</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">_normalize_propabilities</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+
+        <span class="c1"># the order is preserved so we can simply zip them</span>
+        <span class="c1"># back together</span>
+        <span class="n">norm</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">values</span><span class="p">))</span>
+
+        <span class="c1"># add the ignored fields back</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">ignore</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">propabilities</span><span class="p">:</span>
+                <span class="n">norm</span><span class="p">[</span><span class="n">e</span><span class="p">]</span> <span class="o">=</span> <span class="n">propabilities</span><span class="p">[</span><span class="n">e</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">norm</span>
+
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">propabilities</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="c1"># ensure we work on a copy (we don't want to modify the original)</span>
+        <span class="n">propabilities</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">propabilities</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_normalize_propabilities</span><span class="p">(</span><span class="n">propabilities</span><span class="p">)</span>
+
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">"Normalize target must be a dictionary or list, but got '</span><span class="si">{</span><span class="n">propabilities</span><span class="si">}</span><span class="s2">'"</span>
+    <span class="p">)</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-function">
+<h3 class="doc doc-heading" id="cr_kyoushi.generator.template.render_template">
+
+        <code class="highlight language-python">
+render_template<span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>        </code>
+
+
+      <a class="headerlink" href="#cr_kyoushi.generator.template.render_template" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Utility function for rendering Jinja2 text or file templates.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>env</code></td>
+<td><code>NativeEnvironment</code></td>
+<td>
+<p>The Jinja2 environment to use for rendering</p>
+</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>template</code></td>
+<td><code>Union[str, pathlib.Path]</code></td>
+<td>
+<p>The template string or file to render</p>
+</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>context</code></td>
+<td><code>Any</code></td>
+<td>
+<p>The context variables to use for rendering</p>
+</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Any</code></td>
+<td>
+<p>The rendered template string or data structure</p>
+</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Source code in <code>generator/template.py</code></summary>
+<div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">render_template</span><span class="p">(</span>
+    <span class="n">env</span><span class="p">:</span> <span class="n">NativeEnvironment</span><span class="p">,</span>
+    <span class="n">template</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Text</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span>
+    <span class="n">context</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="sd">"""Utility function for rendering Jinja2 text or file templates.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        env: The Jinja2 environment to use for rendering</span>
+<span class="sd">        template: The template string or file to render</span>
+<span class="sd">        context: The context variables to use for rendering</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The rendered template string or data structure</span>
+<span class="sd">    """</span>
+    <span class="c1"># convert strings to template</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">template</span><span class="p">,</span> <span class="n">Path</span><span class="p">):</span>
+        <span class="n">_template</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">template</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">_template</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
+
+    <span class="n">value</span> <span class="o">=</span> <span class="n">_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="n">context</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">):</span>
+        <span class="n">value</span><span class="o">.</span><span class="n">_fail_with_undefined_error</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">value</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-function">
+<h3 class="doc doc-heading" id="cr_kyoushi.generator.template.render_tim">
+
+        <code class="highlight language-python">
+render_tim<span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">object_list</span><span class="p">,</span> <span class="n">src_dir</span><span class="p">,</span> <span class="n">dest_dir</span><span class="p">,</span> <span class="n">inputs</span><span class="p">,</span> <span class="n">global_context</span><span class="p">,</span> <span class="n">parent_context</span><span class="o">=</span><span class="p">{},</span> <span class="n">delete_dirs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delete_files</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>        </code>
+
+
+      <a class="headerlink" href="#cr_kyoushi.generator.template.render_tim" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Function for rendering a TIM using the context and template configuration.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>env</code></td>
+<td><code>NativeEnvironment</code></td>
+<td>
+<p>The TIM Jinja2 environment.</p>
+</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>object_list</code></td>
+<td><code>List[Union[cr_kyoushi.generator.template.File, cr_kyoushi.generator.template.Directory]]</code></td>
+<td>
+<p>The list of template objects to render for the TIM.</p>
+</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>src_dir</code></td>
+<td><code>Path</code></td>
+<td>
+<p>The current source directory for template objects.</p>
+</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>dest_dir</code></td>
+<td><code>Path</code></td>
+<td>
+<p>The current destination directory for rendered templates.</p>
+</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>global_context</code></td>
+<td><code>Dict[str, Any]</code></td>
+<td>
+<p>The global TIM context.</p>
+</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>parent_context</code></td>
+<td><code>Dict[str, Any]</code></td>
+<td>
+<p>The TIM context specific to the parent template objects.</p>
+</td>
+<td><code>{}</code></td>
+</tr>
+<tr>
+<td><code>delete_dirs</code></td>
+<td><code>Optional[Deque[pathlib.Path]]</code></td>
+<td>
+<p>LiFo queue of directories to delete at the end of render process.</p>
+</td>
+<td><code>None</code></td>
+</tr>
+<tr>
+<td><code>delete_files</code></td>
+<td><code>Optional[Deque[pathlib.Path]]</code></td>
+<td>
+<p>LiFo queue of files to delete at the end of render process.</p>
+</td>
+<td><code>None</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Exceptions:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NotImplementedError</code></td>
+<td>
+<p>If the raw object_list contains an unknown template object type</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Tuple[Deque[pathlib.Path], Deque[pathlib.Path]]</code></td>
+<td>
+<p>The final <code>delete_dirs</code> and <code>delete_files</code> queues as tuple <code>(delete_dirs, delete_files)</code></p>
+</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Source code in <code>generator/template.py</code></summary>
+<div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">render_tim</span><span class="p">(</span>
+    <span class="n">env</span><span class="p">:</span> <span class="n">NativeEnvironment</span><span class="p">,</span>
+    <span class="n">object_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">File</span><span class="p">,</span> <span class="n">Directory</span><span class="p">]],</span>
+    <span class="n">src_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="n">dest_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="n">inputs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">global_context</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+    <span class="n">parent_context</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
+    <span class="n">delete_dirs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Deque</span><span class="p">[</span><span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">delete_files</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Deque</span><span class="p">[</span><span class="n">Path</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Deque</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span> <span class="n">Deque</span><span class="p">[</span><span class="n">Path</span><span class="p">]]:</span>
+    <span class="sd">"""Function for rendering a TIM using the context and template configuration.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        env: The TIM Jinja2 environment.</span>
+<span class="sd">        object_list: The list of template objects to render for the TIM.</span>
+<span class="sd">        src_dir: The current source directory for template objects.</span>
+<span class="sd">        dest_dir: The current destination directory for rendered templates.</span>
+<span class="sd">        global_context: The global TIM context.</span>
+<span class="sd">        parent_context: The TIM context specific to the parent template objects.</span>
+<span class="sd">        delete_dirs: LiFo queue of directories to delete at the end of render process.</span>
+<span class="sd">        delete_files: LiFo queue of files to delete at the end of render process.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        NotImplementedError: If the raw object_list contains an unknown template object type</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The final `delete_dirs` and `delete_files` queues as tuple `(delete_dirs, delete_files)`</span>
+<span class="sd">    """</span>
+
+    <span class="k">if</span> <span class="n">delete_dirs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">delete_dirs</span> <span class="o">=</span> <span class="n">deque</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">delete_files</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">delete_files</span> <span class="o">=</span> <span class="n">deque</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">object_list</span><span class="p">:</span>
+        <span class="n">src</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">src_dir</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">src</span><span class="p">)</span>
+        <span class="n">dest</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">dest_dir</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">dest</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">Directory</span><span class="p">):</span>
+            <span class="c1"># create the directory</span>
+            <span class="n">dest</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="c1"># handle the copy configuration</span>
+            <span class="c1"># i.e., resolve all globs and copy them to the destination</span>
+            <span class="k">for</span> <span class="n">glb</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">copy_</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">copy_src</span> <span class="ow">in</span> <span class="n">src</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">glb</span><span class="p">):</span>
+                    <span class="n">copy_src_relative</span> <span class="o">=</span> <span class="n">copy_src</span><span class="o">.</span><span class="n">relative_to</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+                    <span class="n">copy_dest</span> <span class="o">=</span> <span class="n">dest</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">copy_src_relative</span><span class="p">)</span>
+                    <span class="c1"># make sure the containing directory exists (might be needed if glob is for some sub dir)</span>
+                    <span class="n">copy_dest</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">copy_src</span><span class="p">,</span> <span class="n">copy_dest</span><span class="p">)</span>
+
+            <span class="c1"># handle all sub template objects (dirs and files)</span>
+            <span class="n">new_parent_context</span> <span class="o">=</span> <span class="n">parent_context</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">new_parent_context</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">extra</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">delete</span> <span class="ow">and</span> <span class="n">src</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">delete_files</span><span class="p">:</span>
+                <span class="n">delete_dirs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+            <span class="n">render_tim</span><span class="p">(</span>
+                <span class="n">env</span><span class="p">,</span>
+                <span class="n">obj</span><span class="o">.</span><span class="n">contents</span><span class="p">,</span>
+                <span class="n">src</span><span class="p">,</span>
+                <span class="n">dest</span><span class="p">,</span>
+                <span class="n">inputs</span><span class="p">,</span>
+                <span class="n">global_context</span><span class="p">,</span>
+                <span class="n">new_parent_context</span><span class="p">,</span>
+                <span class="n">delete_dirs</span><span class="p">,</span>
+                <span class="n">delete_files</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">File</span><span class="p">):</span>
+            <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">"inputs"</span><span class="p">:</span> <span class="n">inputs</span><span class="p">,</span>
+                <span class="s2">"context"</span><span class="p">:</span> <span class="n">global_context</span><span class="p">,</span>
+                <span class="s2">"parent_context"</span><span class="p">:</span> <span class="n">parent_context</span><span class="p">,</span>
+                <span class="s2">"local_context"</span><span class="p">:</span> <span class="n">obj</span><span class="o">.</span><span class="n">extra</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">delete</span> <span class="ow">and</span> <span class="n">src</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">delete_files</span><span class="p">:</span>
+                <span class="n">delete_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+            <span class="n">write_template</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">dest</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">delete_dirs</span><span class="p">,</span> <span class="n">delete_files</span><span class="p">)</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-function">
+<h3 class="doc doc-heading" id="cr_kyoushi.generator.template.validate_object_list">
+
+        <code class="highlight language-python">
+validate_object_list<span class="p">(</span><span class="n">object_list</span><span class="p">)</span>        </code>
+
+
+      <a class="headerlink" href="#cr_kyoushi.generator.template.validate_object_list" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Utility function for validating template object model lists.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>object_list</code></td>
+<td><code></code></td>
+<td>
+<p>List of unvalidated template object models.</p>
+</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>List[Union[cr_kyoushi.generator.template.File, cr_kyoushi.generator.template.Directory]]</code></td>
+<td>
+<p>A validated list of template object models converted to the correct
+Python classes.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Source code in <code>generator/template.py</code></summary>
+<div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">validate_object_list</span><span class="p">(</span><span class="n">object_list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">File</span><span class="p">,</span> <span class="n">Directory</span><span class="p">]]:</span>
+    <span class="sd">"""Utility function for validating template object model lists.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        object_list: List of unvalidated template object models.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A validated list of template object models converted to the correct</span>
+<span class="sd">        Python classes.</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">parse_obj_as</span><span class="p">(</span>
+        <span class="n">Annotated</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">File</span><span class="p">,</span> <span class="n">Directory</span><span class="p">]],</span> <span class="n">Field</span><span class="p">()],</span>  <span class="c1"># type: ignore[arg-type]</span>
+        <span class="n">object_list</span><span class="p">,</span>
+    <span class="p">)</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+<div class="doc doc-object doc-function">
+<h3 class="doc doc-heading" id="cr_kyoushi.generator.template.write_template">
+
+        <code class="highlight language-python">
+write_template<span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">dest</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>        </code>
+
+
+      <a class="headerlink" href="#cr_kyoushi.generator.template.write_template" title="Permanent link">&para;</a></h3>
+<div class="doc doc-contents ">
+<p>Utility function for rendering and writing a template file.</p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>env</code></td>
+<td><code>NativeEnvironment</code></td>
+<td>
+<p>The Jinja2 environment to use for rendering</p>
+</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>src</code></td>
+<td><code>Path</code></td>
+<td>
+<p>The template file path</p>
+</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>dest</code></td>
+<td><code>Path</code></td>
+<td>
+<p>The path to write the rendered template to</p>
+</td>
+<td><em>required</em></td>
+</tr>
+<tr>
+<td><code>context</code></td>
+<td><code>Any</code></td>
+<td>
+<p>The context variables to use for rendering</p>
+</td>
+<td><em>required</em></td>
+</tr>
+</tbody>
+</table>
+<details class="quote">
+<summary>Source code in <code>generator/template.py</code></summary>
+<div class="highlight">
+<pre><span></span><code><span class="k">def</span> <span class="nf">write_template</span><span class="p">(</span><span class="n">env</span><span class="p">:</span> <span class="n">NativeEnvironment</span><span class="p">,</span> <span class="n">src</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">dest</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+    <span class="sd">"""Utility function for rendering and writing a template file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        env: The Jinja2 environment to use for rendering</span>
+<span class="sd">        src: The template file path</span>
+<span class="sd">        dest: The path to write the rendered template to</span>
+<span class="sd">        context: The context variables to use for rendering</span>
+<span class="sd">    """</span>
+    <span class="n">template_rendered</span> <span class="o">=</span> <span class="n">render_template</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dest</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="c1"># mappings and lists are output as yaml files</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">template_rendered</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
+            <span class="c1"># need to exclude str types since they are also sequences</span>
+            <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">template_rendered</span><span class="p">,</span> <span class="n">Text</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">template_rendered</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="n">yaml</span> <span class="o">=</span> <span class="n">YAML</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s2">"safe"</span><span class="p">)</span>
+            <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">template_rendered</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">template_rendered</span><span class="p">))</span>
+</code></pre>
+</div>
+</details>
+</div>
+</div>
+</div>
+</div>
+</div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../random/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Random
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../utils/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Utils
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/vendor.18f0862e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.994580cf.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      
+      <script>
+        app = initialize({
+          base: "../..",
+          features: [],
+          search: Object.assign({
+            worker: "../../assets/javascripts/worker/search.9c0e82ba.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+        <script src="../../js/jquery-3.5.1.min.js"></script>
+      
+        <script src="../../js/jquery.fancybox.min.js"></script>
+      
+    
+  </body>
+</html>
